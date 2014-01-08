@@ -37,6 +37,10 @@ public class TodoList extends ListActivity {
 			performItemClick(position);
 		}
 	};
+	
+	public void performItemClick(int position) {
+		adapter.toggleTaskDone(position);
+	}
 
 	public int size() {
 		return adapter.size();
@@ -48,10 +52,6 @@ public class TodoList extends ListActivity {
 
 	public TodoTask getItem(int position) {
 		return adapter.getItem(position);
-	}
-
-	public void performItemClick(int position) {
-		adapter.toggleTaskDone(position);
 	}
 
 	public int indexOf(TodoTask task) {
