@@ -1,4 +1,8 @@
-package com.noptech.android.realtimetodo;
+package com.noptech.android.realtimetodo.todolist;
+
+import com.noptech.android.realtimetodo.MainActivity;
+import com.noptech.android.realtimetodo.R;
+import com.noptech.android.realtimetodo.R.id;
 
 import android.app.ListActivity;
 import android.view.View;

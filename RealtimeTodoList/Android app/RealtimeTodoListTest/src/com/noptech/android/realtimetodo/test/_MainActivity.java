@@ -7,8 +7,8 @@ import android.widget.EditText;
 
 import com.noptech.android.realtimetodo.MainActivity;
 import com.noptech.android.realtimetodo.R;
-import com.noptech.android.realtimetodo.TodoList;
-import com.noptech.android.realtimetodo.TodoTask;
+import com.noptech.android.realtimetodo.todolist.TodoList;
+import com.noptech.android.realtimetodo.todolist.TodoTask;
 
 public class _MainActivity extends ActivityUnitTestCase<MainActivity> {
 

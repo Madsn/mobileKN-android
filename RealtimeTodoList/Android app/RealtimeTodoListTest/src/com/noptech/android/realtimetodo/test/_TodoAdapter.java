@@ -6,8 +6,8 @@ import android.test.AndroidTestCase;
 import android.view.View;
 import android.widget.TextView;
 
-import com.noptech.android.realtimetodo.TodoAdapter;
-import com.noptech.android.realtimetodo.TodoTask;
+import com.noptech.android.realtimetodo.todolist.TodoAdapter;
+import com.noptech.android.realtimetodo.todolist.TodoTask;
 
 public class _TodoAdapter extends AndroidTestCase {
 	

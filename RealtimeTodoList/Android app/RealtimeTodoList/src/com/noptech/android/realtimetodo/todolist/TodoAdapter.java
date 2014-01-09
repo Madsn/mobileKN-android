@@ -1,4 +1,4 @@
-package com.noptech.android.realtimetodo;
+package com.noptech.android.realtimetodo.todolist;
 
 import java.util.ArrayList;
 import java.util.Collection;

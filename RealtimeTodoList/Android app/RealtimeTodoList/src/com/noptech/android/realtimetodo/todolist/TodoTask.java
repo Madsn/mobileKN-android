@@ -1,4 +1,4 @@
-package com.noptech.android.realtimetodo;
+package com.noptech.android.realtimetodo.todolist;
 
 public class TodoTask {
 
