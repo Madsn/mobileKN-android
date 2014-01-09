@@ -1,52 +1,28 @@
 package com.noptech.android.realtimetodo.test;
 
-import android.content.Intent;
-import android.test.ActivityUnitTestCase;
-import android.widget.Button;
-import android.widget.EditText;
-
 import com.noptech.android.realtimetodo.MainActivity;
-import com.noptech.android.realtimetodo.R;
 import com.noptech.android.realtimetodo.TodoList;
 import com.noptech.android.realtimetodo.TodoTask;
 
-public class MainActivityTest extends ActivityUnitTestCase<MainActivity> {
+import android.content.Intent;
+import android.test.ActivityUnitTestCase;
 
-	private MainActivity activity;
+public class _TodoList extends ActivityUnitTestCase<MainActivity> {
+	
 	private TodoList todoList;
-	private EditText taskNameField;
-	private Button addButton;
-
-	public MainActivityTest() {
+	
+	public _TodoList(){
 		super(MainActivity.class);
 	}
-
+	
 	@Override
 	public void setUp() throws Exception{
 		super.setUp();
 		Intent intent = new Intent(getInstrumentation().getTargetContext(), MainActivity.class);
 		startActivity(intent, null, null);
-		activity = getActivity();
+		MainActivity activity = getActivity();
 		todoList = activity.getTodoList();
 		todoList.clear();
-		addButton = (Button) activity.findViewById(R.id.addButton);
-		taskNameField = (EditText) activity.findViewById(R.id.editText1);
-	}
-
-	@Override
-	public void tearDown(){
-
-	}
-	
-	public void testAddingTask() {
-		String taskName = "Test task 1 !#'9זרו";
-		
-		addTask(taskName);
-		
-		TodoTask task = todoList.getItem(0);
-		assertEquals(1, todoList.size());
-		assertEquals(taskName, task.name);
-		assertEquals(false, task.done);
 	}
 	
 	public void testTogglingTask() {
@@ -59,7 +35,7 @@ public class MainActivityTest extends ActivityUnitTestCase<MainActivity> {
 		todoList.performItemClick(0);
 		assertEquals(false, task.done);
 	}
-	
+
 	public void testNewTasksAddedAtTop() {
 		addTask("addedFirst");
 		addTask("addedSecond");
@@ -81,7 +57,7 @@ public class MainActivityTest extends ActivityUnitTestCase<MainActivity> {
 		assertEquals(3, todoList.indexOf(task2)); // task 2 should be above task 1
 		assertEquals(4, todoList.indexOf(task1));
 	}
-	
+
 	public void testMarkedIncompleteMovedToTop() {
 		addMultipleTasks(5);
 		TodoTask task1 = todoList.getItem(0);
@@ -96,8 +72,7 @@ public class MainActivityTest extends ActivityUnitTestCase<MainActivity> {
 	}
 	
 	private void addTask(String taskName){
-		taskNameField.setText(taskName);
-		addButton.performClick();
+		todoList.addTask(taskName);
 	}
 	
 	private void addMultipleTasks(int numberOfTasks){
@@ -105,6 +80,4 @@ public class MainActivityTest extends ActivityUnitTestCase<MainActivity> {
 			addTask("Task number " + i);
 		}
 	}
-	
 }
-

@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.Comparator;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -134,15 +135,28 @@ public class TodoAdapter extends ArrayAdapter<TodoTask> {
 
         row = (TextView) view;
         TodoTask task = getItem(position);
-        row.setText(task.toString());
         
-        if (task.done){
-        	row.setPaintFlags(row.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-        } else {
-        	row.setPaintFlags(row.getPaintFlags() & ~Paint.STRIKE_THRU_TEXT_FLAG);
-        }
-
+        row.setText(task.toString());
+        applyStylingToRow(row, task.done);
+        row.setPaintFlags(getPaintFlagsToSet(row, task.done));
+        
         return view;
+	}
+
+	private void applyStylingToRow(TextView row, boolean done) {
+		if (done){
+			row.setTextColor(Color.GRAY);
+		} else {
+			row.setTextColor(Color.BLACK);
+		}
+	}
+
+	private int getPaintFlagsToSet(TextView row, boolean done) {
+		if (done){
+			return row.getPaintFlags() | (Paint.STRIKE_THRU_TEXT_FLAG + Paint.DITHER_FLAG);
+		} else {
+			return row.getPaintFlags() & ~(Paint.STRIKE_THRU_TEXT_FLAG + Paint.DITHER_FLAG);
+		}
 	}
 
 	@Override

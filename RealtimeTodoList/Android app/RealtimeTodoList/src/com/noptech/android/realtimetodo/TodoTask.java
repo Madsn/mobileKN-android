@@ -10,6 +10,11 @@ public class TodoTask {
 		this.done = false;
 	}
 	
+	public TodoTask(String name, boolean done){
+		this.name = name;
+		this.done = done;
+	}
+	
 	public String toString() {
 		return this.name;
 	}

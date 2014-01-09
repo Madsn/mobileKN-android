@@ -34,6 +34,7 @@ public class MainActivity extends Activity {
 	}
 	
 	public TodoList getTodoList(){
+		// supplied for tests
 		return todoList;
 	}
 	
