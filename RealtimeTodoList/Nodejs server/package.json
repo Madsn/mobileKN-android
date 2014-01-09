@@ -1,0 +1,39 @@
+{
+  "name": "Chores-prototype",
+  "version": "0.0.1-47",
+  "private": true,
+  "scripts": {
+    "start": "node start.js",
+    "test": "make test",
+    "devprep": "npm install -g nodemon grunt-cli"
+  },
+  "dependencies": {
+    "express": "3.1.1",
+    "changes": "1.1.1",
+    "socket.io": "0.9.14",
+    "async": "0.2.7",
+    "mongoose": "3.6.7"
+  },
+  "devDependencies": {
+    "mocha": "1.9.0",
+    "chai": "1.5.0",
+    "grunt": "0.4.1",
+    "grunt-cli": "0.1.7",
+    "grunt-contrib-jshint": "0.4.3",
+    "grunt-mocha-test": "0.2.2",
+    "grunt-contrib-watch": "0.3.1",
+    "grunt-shell": "0.2.2",
+    "grunt-ssh": "0.3.1",
+    "nodemon": "0.7.6",
+    "socket.io-client": "0.9.11",
+    "growl": "~1.7.0"
+  },
+  "subdomain": "noptech",
+  "domains": [
+    "chorp.noptech.com",
+    "chorp.noptech.dk"
+  ],
+  "engines": {
+    "node": "0.8.x"
+  }
+}

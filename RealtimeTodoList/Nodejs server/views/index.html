@@ -1,0 +1,56 @@
+<!doctype html>
+<html ng:app="RealtimeTodoList">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RealtimeTodoList Web GUI</title>
+  <script type="text/javascript" src="js/libs/jquery-1.10.2.js"></script>
+  <script type="text/javascript" src="js/libs/jquery-ui-1.10.3.js"></script>
+  <script type="text/javascript" src="js/libs/bootstrap.js"></script>
+  <script type="text/javascript" src="js/libs/angular.min.js"></script>
+  <script type="text/javascript" src="js/todo.js"></script>
+  <script type="text/javascript" src="/socket.io/socket.io.js"></script>
+  <link rel="stylesheet" type="text/css" href="css/bootstrap.css">
+  <style type="text/css">
+    .top-buffer { margin-top:20px; }
+    .list-group-item:hover {background-color:#66CCFF;}
+    .done-true {
+      text-decoration: line-through;
+      background-color: grey;
+    }
+  </style>
+</head>
+<body ng:controller="TodoCtrl">
+  <div class="container">
+    <div class="col-xs-12">
+      <!-- Task entry -->
+      <div class="row top-buffer">
+        <form ng:submit="addTodo()" role="form">
+          <div class="form-group">
+            <label class="sr-only" for="newTaskInput">Enter task name</label>
+            <input type="text" ng:model="todoText" class="form-control" id="newTaskInput" placeholder="What needs to be done?">
+          </div>
+          <button type="submit" class="btn btn-primary btn-sm">Add task</button>
+        <button type="button" class="btn btn-primary btn-sm" ng:click="deleteCompleted()">Delete completed</button>
+        </form>
+      </div>
+      <!-- Task list ng:click="chooseFilter(filterBtn.id)"-->
+      <div class="row top-buffer">
+        <ul ng:model="todos" class="list-group">
+          <li class="list-group-item done-{{todo.done}}" ng:repeat="todo in todos | filter: {done:false}"
+          ng:click="toggleDone(todo._id)">
+            {{todo.name}}
+          </li>
+        </ul>
+        <hr>
+        <ul ng:model="todos" class="list-group">
+          <li class="list-group-item done-{{todo.done}}" ng:repeat="todo in todos | filter: {done:true}"
+          ng:click="toggleDone(todo._id)">
+            {{todo.name}}
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

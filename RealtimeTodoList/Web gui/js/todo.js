@@ -20,6 +20,10 @@ chorp.controller('TodoCtrl', function TodoCtrl($scope) {
     }
   };
 
+  $scope.addTodoFromServer = function(task) {
+    $scope.todos.unshift({id: $scope.nextSequence(), text:task.name, done:task.done});
+  };
+
   $scope.toggleDone = function(select_id) {
     var oldTodos = $scope.todos;
     var addLast = [];
@@ -55,5 +59,26 @@ chorp.controller('TodoCtrl', function TodoCtrl($scope) {
       }
     });
   };
+
+  var socket = io.connect('localhost:3000');
+  socket.on('msg', function(data) {
+    console.log(data.msg);
+  });
+  socket.on('taskList', function(data){
+    data = JSON.parse(data);
+    $scope.todos = [];
+    for (var index in data.tasks){
+      $scope.addTodoFromServer(data.tasks[index]);
+    }
+    /* rewrite with angularJS, making below unnecessary */
+    redrawList();
+  });
+  socket.on('newTasks', function(data){
+    data = JSON.parse(data);
+    for (var index in data.tasks){
+      $scope.addTodoFromServer(data.tasks[index]);
+    }
+  });
+
 });
 
