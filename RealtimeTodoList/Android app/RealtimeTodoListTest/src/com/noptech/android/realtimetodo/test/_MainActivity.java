@@ -46,7 +46,7 @@ public class _MainActivity extends ActivityUnitTestCase<MainActivity> {
 		TodoTask task = todoList.getItem(0);
 		assertEquals(1, todoList.size());
 		assertEquals(taskName, task.name);
-		assertEquals(false, task.done);
+		assertFalse(task.done);
 	}
 	
 	private void addTask(String taskName){

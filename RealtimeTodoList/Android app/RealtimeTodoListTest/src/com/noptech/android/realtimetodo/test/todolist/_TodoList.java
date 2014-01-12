@@ -1,4 +1,4 @@
-package com.noptech.android.realtimetodo.test;
+package com.noptech.android.realtimetodo.test.todolist;
 
 import com.noptech.android.realtimetodo.MainActivity;
 import com.noptech.android.realtimetodo.todolist.TodoList;
@@ -29,11 +29,11 @@ public class _TodoList extends ActivityUnitTestCase<MainActivity> {
 		addTask("Task1");
 		
 		TodoTask task = todoList.getItem(0);
-		assertEquals(false, task.done);
+		assertFalse(task.done);
 		todoList.performItemClick(0);
-		assertEquals(true, task.done);		
+		assertTrue(task.done);		
 		todoList.performItemClick(0);
-		assertEquals(false, task.done);
+		assertFalse(task.done);
 	}
 
 	public void testNewTasksAddedAtTop() {

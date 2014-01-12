@@ -1,4 +1,4 @@
-package com.noptech.android.realtimetodo.test;
+package com.noptech.android.realtimetodo.test.todolist;
 
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -23,21 +23,21 @@ public class _TodoAdapter extends AndroidTestCase {
 	public void testCompletedTasksStrikenThrough(){
 		addTask("Task1", false);
 
-		assertEquals(false, isRowStrikenThrough(0));
+		assertFalse(isRowStrikenThrough(0));
 		toggleTaskDone(0);
-		assertEquals(true, isRowStrikenThrough(0));
+		assertTrue(isRowStrikenThrough(0));
 		toggleTaskDone(0);
-		assertEquals(false, isRowStrikenThrough(0));
+		assertFalse(isRowStrikenThrough(0));
 	}
 	
 	public void testCompletedTasksGray(){
 		addTask("Task1", false);
 		
-		assertEquals(false, isRowTextGray(0));
+		assertFalse(isRowTextGray(0));
 		toggleTaskDone(0);
-		assertEquals(true, isRowTextGray(0));
+		assertTrue(isRowTextGray(0));
 		toggleTaskDone(0);
-		assertEquals(false, isRowTextGray(0));
+		assertFalse(isRowTextGray(0));
 	}
 	
 	private boolean isRowStrikenThrough(int position) {
