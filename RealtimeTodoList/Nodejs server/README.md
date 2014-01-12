@@ -20,7 +20,6 @@ Requirements: Heroku toolbelt NOT required unless modifying config.
 
 Prior to running `grunt heroku` (first time only): `git remote add heroku git@heroku.com:madsn.git`
 
-
 ## start.js ##
 Launches app. To start, run 'node start.js', or 'nodemon start.js' for automatic restart on file changes when developing.
 

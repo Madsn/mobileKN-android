@@ -2,15 +2,12 @@ var chorp = angular.module('RealtimeTodoList', []);
 
 chorp.controller('TodoCtrl', function TodoCtrl($scope) {
 
-  $scope.socket = io.connect("127.0.0.1:3000");
-
-  $scope.deleting = false;
+  $scope.socket = io.connect(document.URL);
 
   $scope.todos = [];
 
   $scope.addTodo = function() {
     if ($scope.todoText.length > 0){
-      //$scope.todos.unshift({id: $scope.nextSequence(), text:$scope.todoText, done:false});
       $scope.socket.emit('addTasks', JSON.stringify({tasks:[{name:$scope.todoText, done:false}]}));
       $scope.todoText = '';
     }
@@ -23,19 +20,33 @@ chorp.controller('TodoCtrl', function TodoCtrl($scope) {
     $scope.$digest();
   };
 
-  $scope.toggleDone = function(select_id) {
+  $scope.toggleDone = function(select_id){
+    $scope.toggleDoneRearrange(select_id);
+    var changed_task = $scope.getById(select_id);
+    $scope.socket.emit('setDoneState', JSON.stringify({tasks: [changed_task]}));
+  };
+
+  $scope.getById = function(select_id){
+    for (var i in $scope.todos){
+      if ($scope.todos[i]._id == select_id){
+        return $scope.todos[i];
+      }
+    }
+  };
+
+  $scope.toggleDoneRearrange = function(select_id) {
     var oldTodos = $scope.todos;
     var addLast = [];
+    var changed_task;
     $scope.todos = [];
     angular.forEach(oldTodos, function(todo) {
       if (todo._id === select_id) {
         if (todo.done){
-          todo.done = false;
           $scope.todos.unshift(todo);
         } else {
-          todo.done = true;
           addLast.unshift(todo);
         }
+        todo.done = !todo.done;
       } else {
         if (todo.done){
           addLast.push(todo);
@@ -52,15 +63,13 @@ chorp.controller('TodoCtrl', function TodoCtrl($scope) {
   $scope.deleteCompleted = function() {
     var oldTodos = $scope.todos;
     $scope.todos = [];
-    $scope.deleting = true;
     angular.forEach(oldTodos, function(todo){
       if(!todo.done){
         $scope.todos.push(todo);
       }else{
-        $scope.socket.emit('delTasks', JSON.stringify({tasks:todo._id}));
+        $scope.socket.emit('delTasks', JSON.stringify({tasks:[todo]}));
       }
     });
-    $scope.deleting = false;
   };
 
   $scope.socket.on('connection', function(socket){
@@ -69,6 +78,7 @@ chorp.controller('TodoCtrl', function TodoCtrl($scope) {
   });
 
   $scope.socket.on('msg', function(data) {
+    data = JSON.parse(data);
     console.log('Msg received from server:')
     console.log(data.msg);
   });
@@ -78,10 +88,8 @@ chorp.controller('TodoCtrl', function TodoCtrl($scope) {
     console.log('received updated tasklist from server');
     console.log(data.tasks);
     $scope.todos = [];
-    if(!$scope.deleting){
-      for (var index in data.tasks){
-        $scope.addTodoFromServer(data.tasks[index]);
-      }
+    for (var index in data.tasks){
+      $scope.addTodoFromServer(data.tasks[index]);
     }
   });
 
@@ -92,5 +100,35 @@ chorp.controller('TodoCtrl', function TodoCtrl($scope) {
     }
   });
 
-});
+  $scope.socket.on('delTasks', function(data){
+    data = JSON.parse(data);
+    var oldTodos = $scope.todos;
+    $scope.todos = [];
+    console.log('delTasks received:');
+    console.log(data);
+    console.log(data.tasks);
+    for (var i in data.tasks){
+      for (var localIndex in oldTodos){
+        if (data.tasks[i]._id != oldTodos[localIndex]._id){
+          $scope.todos.push(oldTodos[localIndex]);
+        }
+      }
+    }
+    $scope.$digest();
+  });
 
+  $scope.socket.on('setDoneState', function(data){
+    data = JSON.parse(data);
+    console.log('received setDoneState');
+    console.log(data.tasks[0]);
+    for (var i in data.tasks){
+      for (var j in $scope.todos){
+        if ($scope.todos[j]._id == data.tasks[i]._id){
+          $scope.todos[j].done = data.tasks[i].done;
+        }
+      }
+    }
+    $scope.$digest();
+  });
+
+});

@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>
+            Noptech prototype
+        </title>
+        <link rel="stylesheet" type="text/css" href="stylesheets/style.css">
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js" type="text/javascript"></script>
+        <script src="/socket.io/socket.io.js" type="text/javascript"></script>
+        <style>
+        .done-true {
+          text-decoration: line-through;
+          color: grey;
+        }
+        </style>
+        <script>
+        function TodoCtrl($scope) {
+          $scope.todos = [
+            {text:'learn angular', done:true},
+            {text:'build an angular app', done:false}];
+
+          $scope.addTodo = function() {
+            $scope.todos.push({text:$scope.todoText, done:false});
+            $scope.todoText = '';
+          };
+
+          $scope.remaining = function() {
+            var count = 0;
+            angular.forEach($scope.todos, function(todo) {
+              count += todo.done ? 0 : 1;
+            });
+            return count;
+          };
+
+          $scope.archive = function() {
+            var oldTodos = $scope.todos;
+            $scope.todos = [];
+            angular.forEach(oldTodos, function(todo) {
+              if (!todo.done) $scope.todos.push(todo);
+            });
+          };
+        }
+        </script>
+    </head>
+    <body>
+        <div id="container">
+            <div id="menu">
+                <div class="cssButton" onclick="changePage(1)">
+                    page1
+                </div>
+                <div class="cssButton" onclick="changePage(2)">
+                    page2
+                </div>
+                <div class="cssButton" onclick="changePage(3)">
+                    page3
+                </div>
+            </div>
+            <div class="content" id="page1">
+                <button onclick="socket.emit('getTaskList', {});">Fetch from server</button>
+                <button onclick="deleteSelected()">Delete selected</button>
+                <button onclick="addTasks()">add task</button>
+                <button onclick="socket.emit('clearTasks', {});">Clear all from server</button>
+                <div>
+                    Name: <input type="text" id="taskName">
+                </div>
+                <div>
+                    Description: <input type="text" id="taskDesc">
+                </div>
+                <div id="todoContent"></div>
+            </div>
+            <div class="content" id="page2">
+
+            </div>
+            <div class="content" id="page3">
+                <p>
+                    Page 3 :D
+                </p>
+            </div>
+        </div>
+        <script type="text/javascript">
+        var todoList = [];
+        var todoContent = document.getElementById('todoContent');
+        var listItem = "<div class='listItem' id='";
+        var socket = io.connect('http://localhost:3000');
+        socket.on('msg', function(data) {
+            console.log(data.msg);
+        });
+        socket.on('taskList', function(data){
+            todoList = [];
+            for (var index in data.tasks){
+                console.log("RECEIVED NEW TASK!!");
+                todoList.push(data.tasks[index]);
+            }
+            /* rewrite with angularJS, making below unnecessary */
+            redrawList();
+        });
+        socket.on('newTasks', function(data){
+            for (var index in data.tasks){
+                console.log(data.tasks[index]);
+                todoList.push(data.tasks[index]);
+            }
+            console.log("TODOLIST");
+            console.log(todoList);
+            /* rewrite with angularJS, making below unnecessary */
+            redrawList();
+        });
+        var page1 = document.getElementById("page1");
+        var page2 = document.getElementById("page2");
+        var page3 = document.getElementById("page3");
+        var changePage = function(pageNum) {
+            switch (pageNum) {
+                case 1:
+                    $(page1).show();
+                    $(page2).hide();
+                    $(page3).hide();
+                    break;
+                case 2:
+                    $(page1).hide();
+                    $(page2).show();
+                    $(page3).hide();
+                    break;
+                case 3:
+                    $(page1).hide();
+                    $(page2).hide();
+                    $(page3).show();
+                    break;
+                default:
+                    $(page1).show();
+                    $(page2).hide();
+                    $(page3).hide();
+            }
+            socket.emit('msg', {msg: "Now on page: " + pageNum});
+        };
+        var itemClicked = function(itemID) {
+            console.log(itemID);
+            item = document.getElementById(itemID);
+            if (item.className === "selectedListItem"){
+                item.className = "listItem";
+            }else{
+                item.className = "selectedListItem";
+            }
+        };
+        var deleteSelected = function() {
+            var items = $(".selectedListItem");
+            var ids = [];
+            for (var index in items){
+                var item = document.getElementById(items[index].id);
+                $(item).remove();
+                ids.push(items[index].id);
+            }
+            console.log(ids);
+            socket.emit('delTasks', {tasks:ids});
+        };
+        var addTasks = function() {
+            var name = document.getElementById("taskName").value;
+            var desc = document.getElementById("taskDesc").value;
+            socket.emit('addTasks', {tasks:[{name:name, desc:desc}]});
+        };
+        var redrawList = function(){
+            var newHTML = "";
+            for (var index in todoList) {
+                console.log("redrawing: " + todoList[index].name);
+                newHTML += listItem + todoList[index]._id + "' onclick='itemClicked(\""
+                    + todoList[index]._id + "\")'>"+ todoList[index].name + " - "
+                    + todoList[index].desc + "</div>";
+            }
+            todoContent.innerHTML = newHTML;
+        };
+        </script>
+    </body>
+</html>

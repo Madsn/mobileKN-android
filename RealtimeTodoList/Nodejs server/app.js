@@ -58,10 +58,10 @@ var deleteTasks = function(tasks, callback) {
     }
   };
   if (!(tasks instanceof Array)){
-    Task.remove({_id:tasks}).exec(delTaskCB);
+    Task.remove({_id:tasks._id}).exec(delTaskCB);
   }else{
     for (var index in tasks){
-      Task.remove({_id:tasks[index]}).exec(delTaskCB);
+      Task.remove({_id:tasks[index]._id}).exec(delTaskCB);
     }
   }
   callback(null);
@@ -75,6 +75,16 @@ var deleteAllTasks = function(callback) {
 };
 exports.deleteAllTasks = deleteAllTasks;
 
+var updateTasks = function(tasks, callback){
+  for (var i in tasks){
+    console.log('updating task:' + String(tasks[i]));
+    Task.findByIdAndUpdate(tasks[i]._id, {'done':tasks[i].done}, function(err, result) {
+      if (err) console.log(err);
+      console.log(result);
+    });
+  }
+};
+exports.updateTasks = updateTasks;
 /*
       SOCKETS
  */
@@ -96,7 +106,7 @@ io.sockets.on('connection', function(socket){
 
   sendTaskList();
 
-  socket.emit('msg', {msg:'server says: connection established'});
+  socket.emit('msg', JSON.stringify({msg:'server says: connection established'}));
 
   socket.on('msg', function(data){
     console.log(data.msg);
@@ -134,7 +144,7 @@ io.sockets.on('connection', function(socket){
         if (err){
           socket.emit('msg', {msg: 'error:\n' + err.name + ' ' + err.reason});
         }else{
-          io.sockets.emit('newTasks', JSON.stringify({tasks: savedTasks}));
+          io.sockets.emit('newTasks', JSON.stringify(data));
         }
       });
     }
@@ -159,9 +169,17 @@ io.sockets.on('connection', function(socket){
             'error while attempting to delete task: ' +
             err.name + ' - ' + err.reason}));
         }else{
-          sendTaskList();
+          io.sockets.emit('delTasks', JSON.stringify(data));
+          //sendTaskList();
         }
       });
+    }
+  });
+  socket.on('setDoneState', function(data){
+    data = JSON.parse(data);
+    if (data.hasOwnProperty('tasks')){
+      updateTasks(data.tasks);
+      io.sockets.emit('setDoneState', JSON.stringify(data));
     }
   });
   socket.on('close', function(){

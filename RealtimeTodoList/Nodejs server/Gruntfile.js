@@ -71,11 +71,14 @@ module.exports = function(grunt) {
         }
       },
       herokudeploy: {
-        command: 'echo remember to commit before pushing to heroku &&' +
-                 ' cd .. && git subtree push ' +
-                 '--prefix node heroku master && cd node',
+        command: 'cp ../.gitignore .gitignore && ' +
+                 'git init && git remote add heroku git@heroku.com:chorp.git &&' +
+                 'git add . && git commit -m "sync" && ' +
+                 'git push heroku --force && rm -rf .git && rm .gitignore',
         options: {
           stdout: true,
+          stderr: true,
+          stdin: true,
           message: 'deploy to heroku complete'
         }
       },
