@@ -16,7 +16,7 @@ public class PollSyncer {
 	}
 
 	private void start() {
-		final String wsuri = "ws://10.0.0.10:8080";
+		final String wsuri = "ws://10.0.0.10:3000";
 
 		try {
 			Log.d(TAG, "Connecting");

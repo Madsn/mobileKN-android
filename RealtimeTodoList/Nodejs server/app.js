@@ -12,7 +12,6 @@ var express = require('express'),
   mongoose = require('mongoose'),
   models = require('./models');
 
-
 // define models
 var Task = models.Task;
 
@@ -36,20 +35,25 @@ exports.getAllTasks = getAllTasks;
 
 var addTasks = function(tasks, callback) {
   // TODO - support adding multiple tasks?
+  var taskList = [];
   var task;
   if (!(tasks instanceof Array)){
-    // console.log('*********************');
-    // console.log(tasks);
     task = new Task({name:tasks.name, done:tasks.done});
-    // console.log(task);
+    task.save(function (err) {if (err) { console.log ('Error on save!');}});
+    taskList.push(task);
   }else{
+    var errorCB = function (err) {
+      if (err) { console.log ('Error on save!');}
+    };
     for (var i in tasks){
       task = new Task({name:tasks[i].name, done:tasks[i].done});
+      task.save(errorCB);
+      taskList.push(task);
     }
   }
-  task.save(callback);
+  callback(null);
 };
-//exports.addTasks = addTasks;
+exports.addTasks = addTasks;
 
 var deleteTasks = function(tasks, callback) {
   var delTaskCB = function(err){
@@ -75,13 +79,18 @@ var deleteAllTasks = function(callback) {
 };
 exports.deleteAllTasks = deleteAllTasks;
 
-var updateTasks = function(tasks, callback){
+var updateTasks = function(tasks){
+  var updateCB = function(err, result) {
+    if (err) {
+      console.log(err);
+    }
+    console.log(result);
+  };
   for (var i in tasks){
     console.log('updating task:' + String(tasks[i]));
-    Task.findByIdAndUpdate(tasks[i]._id, {'done':tasks[i].done}, function(err, result) {
-      if (err) console.log(err);
-      console.log(result);
-    });
+    Task.findByIdAndUpdate(tasks[i]._id,
+      {'done':tasks[i].done}, updateCB
+    );
   }
 };
 exports.updateTasks = updateTasks;
@@ -106,7 +115,8 @@ io.sockets.on('connection', function(socket){
 
   sendTaskList();
 
-  socket.emit('msg', JSON.stringify({msg:'server says: connection established'}));
+  socket.emit('msg', JSON.stringify(
+    {msg:'server says: connection established'}));
 
   socket.on('msg', function(data){
     console.log(data.msg);
@@ -114,33 +124,13 @@ io.sockets.on('connection', function(socket){
 
   socket.on('getTaskList', sendTaskList);
 
-  var addTasks = function(tasks, callback) {
-    // TODO - support adding multiple tasks?
-    var taskList = [];
-    if (!(tasks instanceof Array)){
-      // console.log('*********************');
-      // console.log(tasks);
-      var task = new Task({name:tasks.name, done:tasks.done});
-      task.save(function (err) {if (err) console.log ('Error on save!')});
-      taskList.push(task);
-      // console.log(task);
-    }else{
-      for (var i in tasks){
-        var task = new Task({name:tasks[i].name, done:tasks[i].done});
-        task.save(function (err) {if (err) console.log ('Error on save!')});
-        taskList.push(task);
-      }
-    }
-    callback(null, taskList);
-  };
-
   socket.on('addTasks', function(data){
     data = JSON.parse(data);
     // console.log(data);
     if (data.hasOwnProperty('tasks')){
       // var tasks = JSON.parse(data.tasks);
       // console.log(JSON.parse(data.tasks));
-      addTasks(data.tasks, function(err, savedTasks){
+      addTasks(data.tasks, function(err){
         if (err){
           socket.emit('msg', {msg: 'error:\n' + err.name + ' ' + err.reason});
         }else{

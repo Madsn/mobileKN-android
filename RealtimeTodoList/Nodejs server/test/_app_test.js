@@ -60,14 +60,14 @@ describe('Server sockets -', function(){
     });
 
     it('adding first task', function(done){
-      var t = new Task({name:'My test task', desc:'My description'});
+      var t = new Task({name:'My test task', done:false});
       socket.on('newTasks', function(data){
         var tasks = JSON.parse(data).tasks;
         taskIds.push(tasks[0]._id);
         assert.isNotNull(taskIds[0], 'verify ID was received');
         assert.isDefined(taskIds[0], 'verify ID defined');
         assert.equal(tasks[0].name, t.name);
-        assert.equal(tasks[0].desc, t.desc);
+        assert.equal(tasks[0].done, t.done);
         done();
       });
       socket.emit('addTasks', JSON.stringify({tasks: [t]}));
@@ -75,13 +75,13 @@ describe('Server sockets -', function(){
 
     it('adding multiple tasks (single and array)', function(done){
       var t = new Task({name:'My test task2',
-                        desc:'My description for task 2'});
+                        done:false});
       var t2 = new Task({name:'My test task3',
-                        desc:'My description for task 3'});
+                        done:true});
       var i = 0;
       socket.on('newTasks', function(data){
         data = JSON.parse(data);
-        taskIds.push(data.tasks[0]._id);
+        taskIds.push(data.tasks._id);
         // console.log(taskIds);
         i++;
         if (i === 5){
@@ -105,7 +105,7 @@ describe('Server sockets -', function(){
       setTimeout(function(){
         assert.equal(6, length, 'Verifying 6 tasks exist in list');
         done();
-      }, 500);
+      }, 5000);
     });
 
     it('deleting single task (not array)', function(done){
@@ -117,7 +117,7 @@ describe('Server sockets -', function(){
         assert.equal(5, length,
           'Verifying 5 tasks exist in list');
         done();
-      }, 500);
+      }, 5000);
     });
 
     it('deleting single task (array)', function(done){

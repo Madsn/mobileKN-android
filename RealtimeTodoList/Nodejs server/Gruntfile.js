@@ -72,7 +72,8 @@ module.exports = function(grunt) {
       },
       herokudeploy: {
         command: 'cp ../.gitignore .gitignore && ' +
-                 'git init && git remote add heroku git@heroku.com:chorp.git &&' +
+                 'git init && ' +
+                 'git remote add heroku git@heroku.com:chorp.git &&' +
                  'git add . && git commit -m "sync" && ' +
                  'git push heroku --force && rm -rf .git && rm .gitignore',
         options: {
