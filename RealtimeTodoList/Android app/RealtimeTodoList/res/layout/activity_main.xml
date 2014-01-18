@@ -26,7 +26,10 @@
         android:layout_alignParentTop="true"
         android:layout_toLeftOf="@+id/addButton"
         android:ems="10"
-        android:inputType="text" />
+        android:inputType="text" >
+
+        <requestFocus />
+    </EditText>
 
     <Button
         android:id="@+id/addButton"

@@ -2,6 +2,8 @@ package com.noptech.android.realtimetodo;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -12,8 +14,10 @@ import com.noptech.android.realtimetodo.todolist.TodoList;
 
 public class MainActivity extends Activity {
 
+	protected static final String TAG = "MAINACTIVITY";
 	TodoList todoList;
 	NetworkInterface network;
+	private EditText taskNameField;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -22,6 +26,26 @@ public class MainActivity extends Activity {
 
 		todoList = new TodoList(this);
 		// todoList.initializeWithDummyData();
+
+		taskNameField = (EditText) findViewById(R.id.editText1);
+		taskNameField.setOnKeyListener(new EditText.OnKeyListener() {
+
+			@Override
+			public boolean onKey(View v, int keyCode, KeyEvent event) {
+				Log.v(TAG, "Triggered event: " + event.toString());
+				if (event.getAction() == KeyEvent.ACTION_DOWN) {
+					switch (keyCode) {
+					case KeyEvent.KEYCODE_DPAD_CENTER:
+					case KeyEvent.KEYCODE_ENTER:
+						onAddTaskButtonPressed(v);
+						return true;
+					default:
+						break;
+					}
+				}
+				return false;
+			}
+		});
 	}
 
 	@Override
@@ -44,8 +68,10 @@ public class MainActivity extends Activity {
 	}
 
 	public void onAddTaskButtonPressed(View view) {
-		EditText taskNameField = (EditText) findViewById(R.id.editText1);
+		// taskNameField = (EditText) findViewById(R.id.editText1);
 		String taskName = taskNameField.getText().toString();
+		if (taskName.equals(""))
+			return;
 		taskNameField.setText("");
 		todoList.addTask(taskName);
 	}
