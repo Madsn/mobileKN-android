@@ -20,20 +20,19 @@
     
     <EditText
         android:id="@+id/editText1"
-        android:inputType="text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         android:layout_toLeftOf="@+id/addButton"
-        android:ems="10" />
+        android:ems="10"
+        android:inputType="text" />
 
     <Button
         android:id="@+id/addButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/editText1"
-        android:layout_alignBottom="@+id/editText1"
+        android:layout_above="@+id/listView1"
         android:layout_alignRight="@+id/listView1"
         android:onClick="onAddTaskButtonPressed"
         android:text="@string/add_task_btn" />

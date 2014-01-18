@@ -53,5 +53,14 @@ public abstract class NetworkInterface {
 	public int size() {
 		return adapter.size();
 	}
+	
+	public void deleteCompleted() {
+		activity.runOnUiThread(new Runnable() {
+			@Override
+			public void run() {
+				adapter.deleteCompleted();
+			}
+		});
+	}
 
 }

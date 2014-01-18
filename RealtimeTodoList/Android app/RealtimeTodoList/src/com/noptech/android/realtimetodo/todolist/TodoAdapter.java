@@ -236,4 +236,26 @@ public class TodoAdapter extends ArrayAdapter<TodoTask> {
 		this.notifyDataSetChanged();
 	}
 
+	public void deleteCompleted() {
+		Object[] tasks = taskList.toArray();
+		for (Object task : tasks){
+			if (((TodoTask) task).done){
+				taskList.remove((TodoTask) task);	
+			}
+		}
+		this.notifyDataSetChanged();
+	}
+
+	public ArrayList<TodoTask> getAllCompleted() {
+		ArrayList<TodoTask> completedTasks = new ArrayList<TodoTask>();
+		Object[] tasks = taskList.toArray();
+		for (Object taskObj : tasks){
+			TodoTask task = (TodoTask) taskObj;
+			if (task.done){
+				completedTasks.add(task);
+			}
+		}
+		return completedTasks;
+	}
+
 }

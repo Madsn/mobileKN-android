@@ -6,6 +6,7 @@ import io.socket.SocketIO;
 import io.socket.SocketIOException;
 
 import java.net.MalformedURLException;
+import java.util.ArrayList;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -196,20 +197,7 @@ public class SocketSyncer extends NetworkInterface {
 
 	@Override
 	public void add(TodoTask task) {
-		this.emitAddTask(task);
-	}
-
-	private void emitAddTask(TodoTask task) {
-		JSONArray array = new JSONArray();
-		JSONObject msg = new JSONObject();
-		try {
-			array.put(task.toJSONObj());
-			msg.put("tasks", array);
-			socket.emit("addTasks", msg.toString());
-		} catch (JSONException e) {
-			Log.v(TAG, "JSONException: " + e.toString());
-			e.printStackTrace();
-		}
+		emitTaskAsArray("addTasks", task);
 	}
 
 	@Override
@@ -220,21 +208,33 @@ public class SocketSyncer extends NetworkInterface {
 	}
 
 	private void emitSetDoneState(TodoTask task) {
-		JSONArray array = new JSONArray();
-		JSONObject msg = new JSONObject();
-		try {
-			array.put(task.toJSONObj());
-			msg.put("tasks", array);
-			socket.emit("setDoneState", msg.toString());
-		} catch (JSONException e) {
-			Log.v(TAG, "JSONException: " + e.toString());
-			e.printStackTrace();
-		}
+		emitTaskAsArray("setDoneState", task);
 	}
 
 	@Override
 	public void clear() {
 		socket.emit("clearTasks");
+	}
+	
+	@Override
+	public void deleteCompleted(){
+		ArrayList<TodoTask> tasks = adapter.getAllCompleted();
+		for (TodoTask task : tasks){
+			emitTaskAsArray("delTasks", task);
+		}
+	}
+	
+	private void emitTaskAsArray(String msgType, TodoTask task){
+		JSONArray array = new JSONArray();
+		JSONObject msg = new JSONObject();
+		try {
+			array.put(task.toJSONObj());
+			msg.put("tasks", array);
+			socket.emit(msgType, msg.toString());
+		} catch (JSONException e) {
+			Log.v(TAG, "JSONException: " + e.toString());
+			e.printStackTrace();
+		}
 	}
 
 }

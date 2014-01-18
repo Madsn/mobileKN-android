@@ -40,6 +40,16 @@ public class _TodoAdapter extends AndroidTestCase {
 		assertFalse(isRowTextGray(0));
 	}
 	
+	public void testDeleteCompleted(){
+		addTask("Task1", false);
+		
+		addTask("Task2", true);
+		addTask("Task3", true);
+		assertEquals(3, adapter.size());
+		adapter.deleteCompleted();
+		assertEquals(1, adapter.size());
+	}
+	
 	private boolean isRowStrikenThrough(int position) {
 		return (getRowPaintFlags(position) & Paint.STRIKE_THRU_TEXT_FLAG) != 0;
 	}

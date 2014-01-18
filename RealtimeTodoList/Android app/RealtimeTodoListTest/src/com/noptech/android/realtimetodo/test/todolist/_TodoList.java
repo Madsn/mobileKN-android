@@ -70,6 +70,16 @@ public class _TodoList extends ActivityUnitTestCase<MainActivity> {
 		assertEquals(1, todoList.indexOf(task2));
 	}
 	
+	public void testDeleteCompleted(){
+		addMultipleTasks(5);
+		assertEquals(5, todoList.size());
+		todoList.performItemClick(0);
+		todoList.performItemClick(1);
+		assertEquals(5, todoList.size());
+		todoList.deleteCompleted();
+		assertEquals(3, todoList.size());
+	}
+	
 	private void addTask(String taskName){
 		todoList.addTask(taskName);
 	}

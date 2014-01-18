@@ -70,4 +70,8 @@ public class TodoList extends ListActivity {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	public void deleteCompleted() {
+		syncer.deleteCompleted();
+	}
 }
