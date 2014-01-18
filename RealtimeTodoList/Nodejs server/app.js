@@ -51,7 +51,7 @@ var addTasks = function(tasks, callback) {
       taskList.push(task);
     }
   }
-  callback(null);
+  callback(null, taskList);
 };
 exports.addTasks = addTasks;
 
@@ -130,11 +130,12 @@ io.sockets.on('connection', function(socket){
     if (data.hasOwnProperty('tasks')){
       // var tasks = JSON.parse(data.tasks);
       // console.log(JSON.parse(data.tasks));
-      addTasks(data.tasks, function(err){
+      addTasks(data.tasks, function(err, taskList){
         if (err){
           socket.emit('msg', {msg: 'error:\n' + err.name + ' ' + err.reason});
         }else{
-          io.sockets.emit('newTasks', JSON.stringify(data));
+          console.log('sending netwasks: %s', JSON.stringify({tasks: taskList}));
+          io.sockets.emit('newTasks', JSON.stringify({tasks: taskList}));
         }
       });
     }

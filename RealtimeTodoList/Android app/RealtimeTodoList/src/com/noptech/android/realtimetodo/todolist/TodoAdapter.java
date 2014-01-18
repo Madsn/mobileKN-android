@@ -7,6 +7,7 @@ import java.util.Comparator;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,51 +15,46 @@ import android.widget.ArrayAdapter;
 import android.widget.Filter;
 import android.widget.TextView;
 
-
 public class TodoAdapter extends ArrayAdapter<TodoTask> {
 
+	private static final String TAG = "TODOADAPTER";
 	private ArrayList<TodoTask> taskList;
 	private LayoutInflater mInflater;
 	private int mResource;
 
 	public TodoAdapter(Context context, int resource) {
 		super(context, resource);
-		mInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		mInflater = (LayoutInflater) context
+				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		mResource = resource;
 		taskList = new ArrayList<TodoTask>();
 	}
 
-	public void add(String taskName) {
-		TodoTask task = new TodoTask(taskName);
-		this.add(task);
+	@Override
+	public void add(TodoTask task) {
+		this.insert(task, 0);
 	}
-	
+
 	public void removeAtPosition(int position) {
 		taskList.remove(position);
 		this.notifyDataSetChanged();
 	}
-	
+
 	private int getDoneTaskCount() {
 		int doneTasks = 0;
-		for (TodoTask task : taskList){
-			if (task.done){
+		for (TodoTask task : taskList) {
+			if (task.done) {
 				doneTasks++;
 			}
 		}
 		return doneTasks;
-	}
-	
-	@Override
-	public void add(TodoTask task) {
-		taskList.add(task);
-		this.notifyDataSetChanged();
 	}
 
 	@Override
 	public TodoTask getItem(int position) {
 		return taskList.get(position);
 	}
-	
+
 	@Override
 	public void addAll(Collection<? extends TodoTask> collection) {
 		addAll(collection);
@@ -66,15 +62,23 @@ public class TodoAdapter extends ArrayAdapter<TodoTask> {
 
 	@Override
 	public void addAll(TodoTask... items) {
-		for (TodoTask task : items){
+		for (TodoTask task : items) {
 			taskList.add(task);
 		}
 		this.notifyDataSetChanged();
 	}
 
 	@Override
-	public void remove(TodoTask object) {
-		taskList.remove(object);
+	public void remove(TodoTask taskToRemove) {
+		for (TodoTask task : taskList) {
+			if (task._id.equals(taskToRemove._id)) {
+				taskList.remove(task);
+				return;
+			}
+		}
+		Log.v(TAG,
+				"Could not find matching local task: "
+						+ taskToRemove.toString());
 		this.notifyDataSetChanged();
 	}
 
@@ -125,26 +129,26 @@ public class TodoAdapter extends ArrayAdapter<TodoTask> {
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		View view;
-        TextView row;
-        
-        if (convertView == null) {
-            view = mInflater.inflate(mResource, parent, false);
-        } else {
-            view = convertView;
-        }
+		TextView row;
 
-        row = (TextView) view;
-        TodoTask task = getItem(position);
-        
-        row.setText(task.toString());
-        applyStylingToRow(row, task.done);
-        row.setPaintFlags(getPaintFlagsToSet(row, task.done));
-        
-        return view;
+		if (convertView == null) {
+			view = mInflater.inflate(mResource, parent, false);
+		} else {
+			view = convertView;
+		}
+
+		row = (TextView) view;
+		TodoTask task = getItem(position);
+
+		row.setText(task.toString());
+		applyStylingToRow(row, task.done);
+		row.setPaintFlags(getPaintFlagsToSet(row, task.done));
+
+		return view;
 	}
 
 	private void applyStylingToRow(TextView row, boolean done) {
-		if (done){
+		if (done) {
 			row.setTextColor(Color.GRAY);
 		} else {
 			row.setTextColor(Color.BLACK);
@@ -152,10 +156,12 @@ public class TodoAdapter extends ArrayAdapter<TodoTask> {
 	}
 
 	private int getPaintFlagsToSet(TextView row, boolean done) {
-		if (done){
-			return row.getPaintFlags() | (Paint.STRIKE_THRU_TEXT_FLAG + Paint.DITHER_FLAG);
+		if (done) {
+			return row.getPaintFlags()
+					| (Paint.STRIKE_THRU_TEXT_FLAG + Paint.DITHER_FLAG);
 		} else {
-			return row.getPaintFlags() & ~(Paint.STRIKE_THRU_TEXT_FLAG + Paint.DITHER_FLAG);
+			return row.getPaintFlags()
+					& ~(Paint.STRIKE_THRU_TEXT_FLAG + Paint.DITHER_FLAG);
 		}
 	}
 
@@ -177,13 +183,8 @@ public class TodoAdapter extends ArrayAdapter<TodoTask> {
 		return super.getFilter();
 	}
 
-	public void insert(String taskName, int index) {
-		TodoTask task = new TodoTask(taskName);
-		insert(task, index);
-	}
-	
 	@Override
-	public void insert(TodoTask task, int index){
+	public void insert(TodoTask task, int index) {
 		taskList.add(index, task);
 		this.notifyDataSetChanged();
 	}
@@ -191,7 +192,7 @@ public class TodoAdapter extends ArrayAdapter<TodoTask> {
 	public void toggleTaskDone(int position) {
 		TodoTask task = taskList.get(position);
 		task.done = !task.done;
-		if (task.done){
+		if (task.done) {
 			moveToBottomOfList(task);
 		} else {
 			moveToTopOfList(task);
@@ -215,6 +216,24 @@ public class TodoAdapter extends ArrayAdapter<TodoTask> {
 
 	public int indexOf(TodoTask task) {
 		return taskList.indexOf(task);
+	}
+
+	public void setDoneState(TodoTask receivedTask) {
+		for (TodoTask task : taskList) {
+			if (task._id.equals(receivedTask._id)) {
+				task.done = receivedTask.done;
+				if (task.done) {
+					moveToBottomOfList(task);
+				} else {
+					moveToTopOfList(task);
+				}
+				return;
+			}
+		}
+		Log.v(TAG,
+				"Could not find matching local task: "
+						+ receivedTask.toString());
+		this.notifyDataSetChanged();
 	}
 
 }

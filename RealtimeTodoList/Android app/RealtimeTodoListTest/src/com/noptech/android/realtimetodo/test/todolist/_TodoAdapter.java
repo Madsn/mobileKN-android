@@ -61,7 +61,9 @@ public class _TodoAdapter extends AndroidTestCase {
 	}
 	
 	private void addTask(String taskName, boolean done){
-		adapter.add(new TodoTask(taskName, done));
+		TodoTask task = new TodoTask(taskName);
+		task.done = done;
+		adapter.add(task);
 	}
 	
 	private void toggleTaskDone(int position){

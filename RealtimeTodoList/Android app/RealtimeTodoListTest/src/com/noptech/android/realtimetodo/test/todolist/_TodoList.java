@@ -1,15 +1,14 @@
 package com.noptech.android.realtimetodo.test.todolist;
 
-import com.noptech.android.realtimetodo.MainActivity;
-import com.noptech.android.realtimetodo.todolist.TodoList;
-import com.noptech.android.realtimetodo.todolist.TodoTask;
-
 import android.content.Intent;
 import android.test.ActivityUnitTestCase;
 
+import com.noptech.android.realtimetodo.MainActivity;
+import com.noptech.android.realtimetodo.todolist.TodoTask;
+
 public class _TodoList extends ActivityUnitTestCase<MainActivity> {
 	
-	private TodoList todoList;
+	private TestTodoList todoList;
 	
 	public _TodoList(){
 		super(MainActivity.class);
@@ -21,7 +20,7 @@ public class _TodoList extends ActivityUnitTestCase<MainActivity> {
 		Intent intent = new Intent(getInstrumentation().getTargetContext(), MainActivity.class);
 		startActivity(intent, null, null);
 		MainActivity activity = getActivity();
-		todoList = activity.getTodoList();
+		todoList = new TestTodoList(activity);
 		todoList.clear();
 	}
 	

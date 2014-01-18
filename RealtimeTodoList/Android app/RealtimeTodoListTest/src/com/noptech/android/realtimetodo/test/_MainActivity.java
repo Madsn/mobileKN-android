@@ -7,13 +7,13 @@ import android.widget.EditText;
 
 import com.noptech.android.realtimetodo.MainActivity;
 import com.noptech.android.realtimetodo.R;
-import com.noptech.android.realtimetodo.todolist.TodoList;
+import com.noptech.android.realtimetodo.test.todolist.TestTodoList;
 import com.noptech.android.realtimetodo.todolist.TodoTask;
 
 public class _MainActivity extends ActivityUnitTestCase<MainActivity> {
 
 	private MainActivity activity;
-	private TodoList todoList;
+	private TestTodoList todoList;
 	private EditText taskNameField;
 	private Button addButton;
 
@@ -27,10 +27,11 @@ public class _MainActivity extends ActivityUnitTestCase<MainActivity> {
 		Intent intent = new Intent(getInstrumentation().getTargetContext(), MainActivity.class);
 		startActivity(intent, null, null);
 		activity = getActivity();
-		todoList = activity.getTodoList();
+		todoList = new TestTodoList(activity);
 		todoList.clear();
 		addButton = (Button) activity.findViewById(R.id.addButton);
 		taskNameField = (EditText) activity.findViewById(R.id.editText1);
+		activity.setTodoList(todoList);
 	}
 
 	@Override

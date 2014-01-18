@@ -1,37 +1,45 @@
 package com.noptech.android.realtimetodo.todolist;
 
-import com.noptech.android.realtimetodo.MainActivity;
-import com.noptech.android.realtimetodo.R;
-import com.noptech.android.realtimetodo.R.id;
-
 import android.app.ListActivity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 
+import com.noptech.android.realtimetodo.MainActivity;
+import com.noptech.android.realtimetodo.R;
+import com.noptech.android.realtimetodo.network.NetworkInterface;
+import com.noptech.android.realtimetodo.network.SocketSyncer;
+
 public class TodoList extends ListActivity {
 	
-	ListView todoListView;
+	private static final String serverURL = "http://10.0.0.10:3000";
+	private ListView todoListView;
+	protected NetworkInterface syncer;
+	protected TodoAdapter adapter;
 	// an "adapter" binds the underlying data structure with the gui object
-	TodoAdapter adapter;
 
 	public TodoList(MainActivity mainActivity) {
 		todoListView = (ListView) mainActivity.findViewById(R.id.listView1);
 		adapter = new TodoAdapter(mainActivity, android.R.layout.simple_list_item_1);
 		todoListView.setAdapter(adapter);
 		todoListView.setOnItemClickListener(todoTaskClickedListener);
+		syncer = createSyncer(mainActivity);
+	}
+
+	protected NetworkInterface createSyncer(MainActivity mainActivity) {
+		return new SocketSyncer(serverURL, adapter, mainActivity);
 	}
 
 	public void initializeWithDummyData() {
-		adapter.add("Hello");
-		adapter.add("world");
-		adapter.add("Whats");
-		adapter.add("UUUUP");
+		syncer.add("Hello");
+		syncer.add("world");
+		syncer.add("Whats");
+		syncer.add("UUUUP");
 	}
 
 	public void addTask(String taskName) {
-		adapter.insert(taskName, 0);
+		syncer.add(taskName);
 	}
 
 	private OnItemClickListener todoTaskClickedListener = new OnItemClickListener() {
@@ -43,22 +51,23 @@ public class TodoList extends ListActivity {
 	};
 	
 	public void performItemClick(int position) {
-		adapter.toggleTaskDone(position);
+		syncer.toggleTaskDone(position);
 	}
 
 	public int size() {
-		return adapter.size();
+		return syncer.size();
 	}
 
 	public void clear() {
-		adapter.clear();
+		syncer.clear();
 	}
 
-	public TodoTask getItem(int position) {
-		return adapter.getItem(position);
+	public void addTask(TodoTask task) {
+		syncer.add(task);
 	}
 
-	public int indexOf(TodoTask task) {
-		return adapter.indexOf(task);
+	protected NetworkInterface createSyncer() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

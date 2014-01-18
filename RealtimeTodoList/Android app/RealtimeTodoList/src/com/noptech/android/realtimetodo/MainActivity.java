@@ -1,16 +1,18 @@
 package com.noptech.android.realtimetodo;
 
-import com.noptech.android.realtimetodo.todolist.TodoList;
-
-import android.os.Bundle;
 import android.app.Activity;
+import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
 import android.widget.EditText;
 
+import com.noptech.android.realtimetodo.network.NetworkInterface;
+import com.noptech.android.realtimetodo.todolist.TodoList;
+
 public class MainActivity extends Activity {
 	
 	TodoList todoList;
+	NetworkInterface network;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -18,7 +20,7 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
         
         todoList = new TodoList(this);
-        todoList.initializeWithDummyData();
+        //todoList.initializeWithDummyData();       
     }
 
 	@Override
@@ -34,10 +36,9 @@ public class MainActivity extends Activity {
 		taskNameField.setText("");
 		todoList.addTask(taskName);
 	}
-	
-	public TodoList getTodoList(){
-		// supplied for tests
-		return todoList;
+
+	public void setTodoList(TodoList todoList) {
+		this.todoList = todoList; // for testing
 	}
 	
 }

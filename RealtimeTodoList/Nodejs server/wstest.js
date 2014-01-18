@@ -5,5 +5,10 @@ wss.on('connection', function(ws) {
         console.log('received: %s', message);
         ws.send(message);
     });
+
+    ws.on('test', function(message) {
+      console.log('test received: %s', message);
+      ws.send(message);
+    });
     ws.send('something');
 });

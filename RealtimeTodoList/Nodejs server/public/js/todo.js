@@ -91,6 +91,7 @@ chorp.controller('TodoCtrl', function TodoCtrl($scope) {
     for (var index in data.tasks){
       $scope.addTodoFromServer(data.tasks[index]);
     }
+    $scope.$digest();
   });
 
   $scope.socket.on('newTasks', function(data){
@@ -98,6 +99,7 @@ chorp.controller('TodoCtrl', function TodoCtrl($scope) {
     for (var index in data.tasks){
       $scope.addTodoFromServer(data.tasks[index]);
     }
+    $scope.$digest();
   });
 
   $scope.socket.on('delTasks', function(data){
