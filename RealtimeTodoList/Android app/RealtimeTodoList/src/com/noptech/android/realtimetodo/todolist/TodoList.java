@@ -13,7 +13,7 @@ import com.noptech.android.realtimetodo.network.SocketSyncer;
 
 public class TodoList extends ListActivity {
 	
-	private static final String serverURL = "http://10.0.0.10:3000";
+	private static final String serverURL = "http://chorp.herokuapp.com/";
 	private ListView todoListView;
 	protected NetworkInterface syncer;
 	protected TodoAdapter adapter;
