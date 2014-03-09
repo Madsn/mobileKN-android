@@ -21,7 +21,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="@drawable/up_arrow_black"
-            style="?android:attr/buttonBarButtonStyle" />
+            style="?android:attr/buttonBarButtonStyle"
+            android:onClick="onBeerPlusBtnClick" />
 
         <Button
             android:id="@+id/soda_plus_btn"
@@ -30,7 +31,8 @@
             android:layout_gravity="right"
             android:layout_weight="1"
             android:background="@drawable/up_arrow_black"
-            style="?android:attr/buttonBarButtonStyle" />
+            style="?android:attr/buttonBarButtonStyle"
+            android:onClick="onSodaPlusBtnClick" />
     </TableRow>
 
     <TableRow
@@ -95,7 +97,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="@drawable/down_arrow_black"
-            style="?android:attr/buttonBarButtonStyle" />
+            style="?android:attr/buttonBarButtonStyle"
+            android:onClick="onBeerMinusBtnClick" />
 
         <Button
             android:id="@+id/soda_minus_btn"
@@ -103,7 +106,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="@drawable/down_arrow_black"
-            style="?android:attr/buttonBarButtonStyle" />
+            style="?android:attr/buttonBarButtonStyle"
+            android:onClick="onSodaMinusBtnClick" />
     </TableRow>
 
     <TableRow
@@ -139,7 +143,8 @@
             android:id="@+id/save_btn"
             android:layout_width="match_parent"
             android:layout_weight="1"
-            android:text="@string/save_btn_text" />
+            android:text="@string/save_btn_text" 
+            android:onClick="onSaveBtnClick"/>
     </TableRow>
 
 </LinearLayout>

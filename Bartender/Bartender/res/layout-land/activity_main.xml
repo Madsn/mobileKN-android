@@ -22,7 +22,8 @@
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:background="@drawable/up_arrow_black" />
+            android:background="@drawable/up_arrow_black"
+            android:onClick="onBeerPlusBtnClick" />
 
         <TextView
             android:id="@+id/beer_count"
@@ -45,7 +46,8 @@
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:background="@drawable/down_arrow_black" />
+            android:background="@drawable/down_arrow_black"
+            android:onClick="onBeerMinusBtnClick" />
     </LinearLayout>
 
     <LinearLayout
@@ -60,7 +62,8 @@
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:background="@drawable/up_arrow_black" />
+            android:background="@drawable/up_arrow_black"
+            android:onClick="onSodaPlusBtnClick" />
 
         <TextView
             android:id="@+id/soda_count"
@@ -83,7 +86,8 @@
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:background="@drawable/down_arrow_black" />
+            android:background="@drawable/down_arrow_black"
+            android:onClick="onSodaMinusBtnClick" />
     </LinearLayout>
 
     <LinearLayout
@@ -124,7 +128,8 @@
                 android:id="@+id/save_btn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/save_btn_text" />
+                android:text="@string/save_btn_text"
+                android:onClick="onSaveBtnClick" />
         </TableRow>
     </LinearLayout>
 
