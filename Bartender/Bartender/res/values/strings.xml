@@ -4,5 +4,12 @@
     <string name="app_name">Bartender</string>
     <string name="action_settings">Settings</string>
     <string name="hello_world">Hello world!</string>
+    <string name="save_btn_text">Gem</string>
+    <string name="initials_label">Initialer</string>
+    <string name="soda">Vand</string>
+    <string name="beers">Øl</string>
+    <string name="save_edit_btn_text">Gem ændringer</string>
+    <string name="edit_header_label">Redigerer registrering fra -</string>
+    <string name="saved_by_label">Oprettet af</string>
 
 </resources>

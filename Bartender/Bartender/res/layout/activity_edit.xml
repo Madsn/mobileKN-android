@@ -8,7 +8,48 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".MainActivity" >
+    
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1">
 
+        <TextView
+            android:id="@+id/edit_header_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/edit_header_label" />
+
+        <TextView
+            android:id="@+id/edit_header_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="5dp"
+            android:text="TEST DATA (time + date here)" />
+        
+    </TableRow>
+    
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1" >
+        
+        <TextView
+            android:id="@+id/saved_by_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:text="@string/saved_by_label" />
+        
+        <TextView
+            android:id="@+id/initials_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="5dp"
+            android:text="TEST DATA" />
+        
+    </TableRow>
+    
     <TableRow
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -17,11 +58,11 @@
 
         <Button
             android:id="@+id/beer_plus_btn"
+            style="?android:attr/buttonBarButtonStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@drawable/up_arrow_black"
-            style="?android:attr/buttonBarButtonStyle" />
+            android:background="@drawable/up_arrow_black" />
 
         <Button
             android:id="@+id/soda_plus_btn"
@@ -106,29 +147,7 @@
             style="?android:attr/buttonBarButtonStyle" />
     </TableRow>
 
-    <TableRow
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="1" >
-
-        <TextView
-            android:id="@+id/initials_label"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:padding="5dp"
-            android:text="@string/initials_label" />
-
-        <EditText
-            android:id="@+id/initials_edittext"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="3"
-            android:inputType="textPersonName" >
-
-            <requestFocus android:layout_width="wrap_content" />
-        </EditText>
-    </TableRow>
+    
 
     <TableRow
         android:layout_width="match_parent"
@@ -136,10 +155,9 @@
         android:layout_weight="1" >
 
         <Button
-            android:id="@+id/save_btn"
+            android:id="@+id/save_edit_btn"
             android:layout_width="match_parent"
             android:layout_weight="1"
-            android:text="@string/save_btn_text" />
+            android:text="@string/save_edit_btn_text" />
     </TableRow>
-
 </LinearLayout>
