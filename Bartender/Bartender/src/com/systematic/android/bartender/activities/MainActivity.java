@@ -1,4 +1,12 @@
-package com.systematic.android.bartender;
+package com.systematic.android.bartender.activities;
+
+import java.util.Date;
+
+import com.systematic.android.bartender.Bartab;
+import com.systematic.android.bartender.R;
+import com.systematic.android.bartender.R.id;
+import com.systematic.android.bartender.R.layout;
+import com.systematic.android.bartender.R.menu;
 
 import android.os.Bundle;
 import android.app.Activity;
@@ -12,7 +20,7 @@ public class MainActivity extends Activity {
 
 	TextView sodaCount, beerCount;
 	EditText initials;
-	Bartender bartender;
+	Bartab bartab;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -23,14 +31,14 @@ public class MainActivity extends Activity {
 		beerCount = (TextView) findViewById(R.id.beer_count);
 		initials = (EditText) findViewById(R.id.initials_edittext);
 
-		bartender = Bartender.getInstance();
+		bartab = new Bartab();
 		updateGUI();
 	}
 
 	public void updateGUI() {
-		beerCount.setText(bartender.getBeerCountAsString());
-		sodaCount.setText(bartender.getSodaCountAsString());
-		initials.setText(bartender.getInitials());
+		beerCount.setText(bartab.getBeerCountAsString());
+		sodaCount.setText(bartab.getSodaCountAsString());
+		initials.setText(bartab.getInitials());
 	}
 
 	@Override
@@ -41,33 +49,35 @@ public class MainActivity extends Activity {
 	}
 
 	public void onBeerPlusBtnClick(View v) {
-		bartender.addBeer();
-		beerCount.setText(bartender.getBeerCountAsString());
+		bartab.addBeer();
+		beerCount.setText(bartab.getBeerCountAsString());
 	}
 
 	public void onSodaPlusBtnClick(View v) {
-		bartender.addSoda();
-		sodaCount.setText(bartender.getSodaCountAsString());
+		bartab.addSoda();
+		sodaCount.setText(bartab.getSodaCountAsString());
 	}
 
 	public void onBeerMinusBtnClick(View v) {
-		bartender.removeBeer();
-		beerCount.setText(bartender.getBeerCountAsString());
+		bartab.removeBeer();
+		beerCount.setText(bartab.getBeerCountAsString());
 	}
 
 	public void onSodaMinusBtnClick(View v) {
-		bartender.removeSoda();
-		sodaCount.setText(bartender.getSodaCountAsString());
+		bartab.removeSoda();
+		sodaCount.setText(bartab.getSodaCountAsString());
 	}
 
 	public void onSaveBtnClick(View v) {
-
+		Date curDate = new Date();
+		bartab.setCreatedAt(curDate);
+		bartab.setLastEditedAt(curDate);
 	}
 
 	@Override
 	protected void onSaveInstanceState(final Bundle outState) {
 		super.onSaveInstanceState(outState);
-		outState.putSerializable(Bartender.TAG, bartender);
+		outState.putSerializable(Bartab.TAG, bartab);
 	}
 	
 	@Override
@@ -77,7 +87,7 @@ public class MainActivity extends Activity {
 	}
 
 	public void resetBartender() {
-		bartender.resetCounts();
+		bartab.resetAll();
 	}
 
 }

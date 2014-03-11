@@ -1,4 +1,8 @@
-package com.systematic.android.bartender;
+package com.systematic.android.bartender.activities;
+
+import com.systematic.android.bartender.R;
+import com.systematic.android.bartender.R.layout;
+import com.systematic.android.bartender.R.menu;
 
 import android.app.Activity;
 import android.os.Bundle;

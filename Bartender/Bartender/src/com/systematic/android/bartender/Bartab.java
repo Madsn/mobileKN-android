@@ -1,31 +1,29 @@
 package com.systematic.android.bartender;
 
 import java.io.Serializable;
+import java.util.Date;
 
-public class Bartender implements Serializable {
+public class Bartab implements Serializable {
 
 	private static final long serialVersionUID = 4631878964182806525L;
 
 	public static final String TAG = "BartenderObj";
 	
+	private long id;
+	
 	private int beerCount;
 	private int sodaCount;
 	private String initials;
 
-	private Bartender() {
+	private Date createdAt;
+	private Date lastEditedAt;
+	
+	public Bartab() {
 		this.beerCount = 0;
 		this.sodaCount = 0;
 		this.initials = "";
 	}
 	
-	private static class Holder {
-		static final Bartender INSTANCE = new Bartender();
-	}
-	
-	public static Bartender getInstance() {
-		return Holder.INSTANCE;
-	}
-
 	public String getBeerCountAsString() {
 		return Integer.toString(beerCount);
 	}
@@ -66,13 +64,45 @@ public class Bartender implements Serializable {
 		sodaCount = newCount;
 	}
 	
-	public void resetCounts(){
+	public void resetAll(){
 		beerCount = 0;
 		sodaCount = 0;
+		initials = "";
 	}
 
 	public String getInitials() {
 		return initials;
+	}
+
+	public Date getCreatedAt() {
+		return createdAt;
+	}
+
+	public void setCreatedAt(Date createdAt) {
+		this.createdAt = createdAt;
+	}
+
+	public Date getLastEditedAt() {
+		return lastEditedAt;
+	}
+
+	public void setLastEditedAt(Date lastEditedAt) {
+		this.lastEditedAt = lastEditedAt;
+	}
+
+	public long getId() {
+		return id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
+	}
+	
+	// for display in listview
+	@Override
+	public String toString() {
+		// TODO: i18n
+		return this.createdAt.toString() + "\n" + beerCount + " øl, " + sodaCount + " vand";  
 	}
 
 }

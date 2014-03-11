@@ -2,62 +2,62 @@ package com.systematic.android.bartender.test.jvm;
 
 import junit.framework.TestCase;
 
-import com.systematic.android.bartender.Bartender;
-import com.systematic.android.bartender.MainActivity;
+import com.systematic.android.bartender.Bartab;
+import com.systematic.android.bartender.activities.MainActivity;
 
 import android.content.Intent;
 import android.test.ActivityInstrumentationTestCase2;
 import android.test.ActivityUnitTestCase;
 
-public class BartenderUnitTest extends TestCase {
+public class BartabUnitTest extends TestCase {
 
-	private Bartender bartender;
+	private Bartab bartab;
 
 	@Override
 	protected void setUp() throws Exception {
 		super.setUp();
-		bartender = Bartender.getInstance();
+		bartab = new Bartab();
 	}
 	
 	private int getBeerCount(){
-		return Integer.parseInt(bartender.getBeerCountAsString());
+		return Integer.parseInt(bartab.getBeerCountAsString());
 	}
 	
 	private int getSodaCount(){
-		return Integer.parseInt(bartender.getSodaCountAsString());
+		return Integer.parseInt(bartab.getSodaCountAsString());
 	}
 
 	public void testAddBeers() {
 		assertEquals(getBeerCount(), 0);
-		bartender.addBeer();
-		bartender.addBeer();
+		bartab.addBeer();
+		bartab.addBeer();
 		assertEquals(getBeerCount(), 2);
 	}
 	
 	public void testRemoveBeersNeverGoesNegative() {
-		bartender.setBeerCount(0);
+		bartab.setBeerCount(0);
 		assertEquals(0, getBeerCount());
-		bartender.removeBeer();
-		bartender.removeBeer();
+		bartab.removeBeer();
+		bartab.removeBeer();
 		assertEquals(0, getBeerCount());
-		bartender.setBeerCount(-5);
+		bartab.setBeerCount(-5);
 		assertEquals(0, getBeerCount());
 	}
 	
 	public void testAddSodas() {
 		assertEquals(0, getSodaCount());
-		bartender.addSoda();
-		bartender.addSoda();
+		bartab.addSoda();
+		bartab.addSoda();
 		assertEquals(2, getSodaCount());
 	}
 	
 	public void testRemoveSodasNeverGoesNegative() {
-		bartender.setSodaCount(0);
+		bartab.setSodaCount(0);
 		assertEquals(0, getSodaCount());
-		bartender.removeSoda();
-		bartender.removeSoda();
+		bartab.removeSoda();
+		bartab.removeSoda();
 		assertEquals(0, getSodaCount(), 0);
-		bartender.setSodaCount(-10);
+		bartab.setSodaCount(-10);
 		assertEquals(0, getSodaCount(), 0);
 	}
 

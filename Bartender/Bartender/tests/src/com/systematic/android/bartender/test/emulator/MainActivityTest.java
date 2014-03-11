@@ -1,21 +1,17 @@
 package com.systematic.android.bartender.test.emulator;
 
-
-import com.systematic.android.bartender.MainActivity;
-import com.systematic.android.bartender.R;
-
-import android.app.Instrumentation;
-import android.content.pm.ActivityInfo;
-import android.os.Bundle;
 import android.test.ActivityInstrumentationTestCase2;
-import android.test.UiThreadTest;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.systematic.android.bartender.R;
+import com.systematic.android.bartender.activities.MainActivity;
+
 public class MainActivityTest extends
 		ActivityInstrumentationTestCase2<MainActivity> {
-	
+
 	MainActivity activity;
 
 	Button addBeerBtn;
@@ -26,16 +22,16 @@ public class MainActivityTest extends
 	EditText initialsText;
 	TextView beerCount;
 	TextView sodaCount;
-	
-	public MainActivityTest(){
+
+	public MainActivityTest() {
 		super(MainActivity.class);
 	}
 
 	@Override
 	public void setUp() throws Exception {
 		super.setUp();
-		activity = this.getActivity();
-		
+		activity = getActivity();
+
 		addBeerBtn = (Button) activity.findViewById(R.id.beer_plus_btn);
 		minusBeerBtn = (Button) activity.findViewById(R.id.beer_minus_btn);
 		addSodaBtn = (Button) activity.findViewById(R.id.soda_plus_btn);
@@ -45,15 +41,14 @@ public class MainActivityTest extends
 		beerCount = (TextView) activity.findViewById(R.id.beer_count);
 		sodaCount = (TextView) activity.findViewById(R.id.soda_count);
 	}
-	
+
 	@Override
 	public void tearDown() throws Exception {
 		activity.resetBartender();
 		super.tearDown();
 	}
-	
-	@UiThreadTest
-	public void testAddingDrinks(){
+
+	public void testAddingDrinks() {
 		assertEquals(0, getSodaCount());
 		assertEquals(0, getBeerCount());
 		multipleClicks(addBeerBtn, 3);
@@ -61,11 +56,10 @@ public class MainActivityTest extends
 		assertEquals(4, getSodaCount());
 		assertEquals(3, getBeerCount());
 	}
-	
-	@UiThreadTest
-	public void testRemovingDrinks(){
-		addBeerBtn.performClick();
-		addSodaBtn.performClick();
+
+	public void testRemovingDrinks() {
+		clickOn(addBeerBtn);
+		clickOn(addSodaBtn);
 		assertEquals(1, getBeerCount());
 		assertEquals(1, getSodaCount());
 		multipleClicks(minusBeerBtn, 4);
@@ -73,56 +67,97 @@ public class MainActivityTest extends
 		assertEquals(0, getBeerCount());
 		assertEquals(0, getSodaCount());
 	}
-	
-	@UiThreadTest
-	public void testStateDestroy() {
+
+	// TODO: Test below doesn't work properly. If mainactivity is broken
+	// in a way where changing orientation resets all state, this test will
+	// still pass
+	public void testStateDestroy() throws InterruptedException {
 		multipleClicks(addBeerBtn, 5);
 		assertEquals("Beercount before destroying activity", 5, getBeerCount());
-		
+
+		// destroyActivity();
 		activity.finish();
-		activity = this.getActivity();
-		
-		addBeerBtn.performClick();
-		assertEquals("Beercount after recreating activity", 6, getBeerCount());
+		setActivity(null);
+		activity = getActivity();
+		getInstrumentation().waitForIdleSync();
+
+		assertEquals("Beercount after recreating activity", 5, getBeerCount());
 	}
-	
-	@UiThreadTest
+
 	public void testStateStop() {
 		multipleClicks(addBeerBtn, 5);
 		assertEquals("Beercount before stopping activity", 5, getBeerCount());
-		
-		this.getInstrumentation().callActivityOnStop(activity);
-		
-		this.getInstrumentation().callActivityOnRestart(activity);
-		
+
+		getInstrumentation().callActivityOnStop(activity);
+		getInstrumentation().callActivityOnRestart(activity);
+		getInstrumentation().waitForIdleSync();
+
 		assertEquals("Beercount after restarting activity", 5, getBeerCount());
 	}
-	
-	@UiThreadTest
+
 	public void testStatePause() {
 		multipleClicks(addBeerBtn, 5);
 		assertEquals("Beercount before pausing activity", 5, getBeerCount());
-		
+
 		// Pause activity and alter state
-		this.getInstrumentation().callActivityOnPause(activity);
-		minusBeerBtn.performClick();
-		
+		getInstrumentation().callActivityOnPause(activity);
+		getInstrumentation().waitForIdleSync();
+		clickOn(minusBeerBtn);
+
 		// Verify that UI is in sync with data on resume
-		this.getInstrumentation().callActivityOnResume(activity);
+		resumeActivity();
 		assertEquals("Beercount after resuming activity", 4, getBeerCount());
 	}
 
-	private void multipleClicks(Button button, int i) {
-		for (;i>0;i--){
-			button.performClick();
-		}
+	private void destroyActivity() {
+		activity.runOnUiThread(new Runnable() {
+			public void run() {
+				getInstrumentation().callActivityOnDestroy(activity);
+			}
+		});
+		// getInstrumentation().waitForIdleSync();
 	}
-	
-	private int getSodaCount(){
+
+	private void resumeActivity() {
+		activity.runOnUiThread(new Runnable() {
+			public void run() {
+				getInstrumentation().callActivityOnResume(activity);
+			}
+		});
+		getInstrumentation().waitForIdleSync();
+	}
+
+	private void multipleClicks(final Button button, final int count) {
+		activity.runOnUiThread(new Runnable() {
+			public void run() {
+				for (int j = count; j > 0; j--) {
+					button.performClick();
+				}
+			}
+		});
+		getInstrumentation().waitForIdleSync();
+	}
+
+	private void clickOn(final Button button) {
+		multipleClicks(button, 1);
+	}
+
+	private void updateGUI() {
+		activity.runOnUiThread(new Runnable() {
+			public void run() {
+				activity.updateGUI();
+			}
+		});
+		getInstrumentation().waitForIdleSync();
+	}
+
+	private int getSodaCount() {
+		// updateGUI();
 		return Integer.parseInt(sodaCount.getText().toString());
 	}
-	
-	private int getBeerCount(){
+
+	private int getBeerCount() {
+		// updateGUI();
 		return Integer.parseInt(beerCount.getText().toString());
 	}
 
