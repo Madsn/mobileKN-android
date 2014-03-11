@@ -12,7 +12,7 @@ public class Bartender implements Serializable {
 	private int sodaCount;
 	private String initials;
 
-	public Bartender() {
+	private Bartender() {
 		this.beerCount = 0;
 		this.sodaCount = 0;
 		this.initials = "";

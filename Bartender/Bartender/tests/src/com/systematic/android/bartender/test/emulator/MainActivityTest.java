@@ -87,11 +87,23 @@ public class MainActivityTest extends
 	}
 	
 	@UiThreadTest
+	public void testStateStop() {
+		multipleClicks(addBeerBtn, 5);
+		assertEquals("Beercount before stopping activity", 5, getBeerCount());
+		
+		this.getInstrumentation().callActivityOnStop(activity);
+		
+		this.getInstrumentation().callActivityOnRestart(activity);
+		
+		assertEquals("Beercount after restarting activity", 5, getBeerCount());
+	}
+	
+	@UiThreadTest
 	public void testStatePause() {
 		multipleClicks(addBeerBtn, 5);
 		assertEquals("Beercount before pausing activity", 5, getBeerCount());
 		
-		// Pause activity and modify data
+		// Pause activity and alter state
 		this.getInstrumentation().callActivityOnPause(activity);
 		minusBeerBtn.performClick();
 		
