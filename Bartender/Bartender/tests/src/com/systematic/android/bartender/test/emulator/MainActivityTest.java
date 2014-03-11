@@ -4,6 +4,8 @@ package com.systematic.android.bartender.test.emulator;
 import com.systematic.android.bartender.MainActivity;
 import com.systematic.android.bartender.R;
 
+import android.content.pm.ActivityInfo;
+import android.os.Bundle;
 import android.test.ActivityInstrumentationTestCase2;
 import android.test.UiThreadTest;
 import android.widget.Button;
@@ -39,6 +41,7 @@ public class MainActivityTest extends
 		saveBtn = (Button) activity.findViewById(R.id.save_btn);
 		beerCount = (TextView) activity.findViewById(R.id.beer_count);
 		sodaCount = (TextView) activity.findViewById(R.id.soda_count);
+		activity.reset();
 	}
 	
 	private int getSodaCount(){
@@ -69,6 +72,24 @@ public class MainActivityTest extends
 		multipleClicks(minusSodaBtn, 4);
 		assertEquals(0, getBeerCount());
 		assertEquals(0, getSodaCount());
+	}
+	
+	@UiThreadTest
+	public void IGNOREtestCountersKeptOnOrientationChange(){
+		multipleClicks(addBeerBtn, 5);
+		
+		assertEquals("Before rotating", 5, getBeerCount());
+		assertEquals("Before rotating", ActivityInfo.SCREEN_ORIENTATION_PORTRAIT, activity.getResources().getConfiguration().orientation);
+		
+		activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+		
+		assertEquals("After rotating to landscape", 5, getBeerCount());
+		assertEquals("After rotating to landscape", ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE, activity.getResources().getConfiguration().orientation);
+		
+		activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+		
+		assertEquals("After rotating back to portrait", 5, getBeerCount());
+		assertEquals("After rotating back to portrait", ActivityInfo.SCREEN_ORIENTATION_PORTRAIT, activity.getResources().getConfiguration().orientation);
 	}
 
 	private void multipleClicks(Button button, int i) {

@@ -9,7 +9,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 public class MainActivity extends Activity {
-	
+
 	TextView sodaCount, beerCount;
 	EditText initials;
 	Bartender bartender;
@@ -18,12 +18,19 @@ public class MainActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		
-		bartender = new Bartender();
-		
+
 		sodaCount = (TextView) findViewById(R.id.soda_count);
 		beerCount = (TextView) findViewById(R.id.beer_count);
 		initials = (EditText) findViewById(R.id.initials_edittext);
+
+		bartender = Bartender.getInstance();
+		updateGUI();
+	}
+
+	private void updateGUI() {
+		beerCount.setText(bartender.getBeerCountAsString());
+		sodaCount.setText(bartender.getSodaCountAsString());
+		initials.setText(bartender.getInitials());
 	}
 
 	@Override
@@ -32,28 +39,38 @@ public class MainActivity extends Activity {
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
 	}
-	
-	public void onBeerPlusBtnClick(View v){
+
+	public void onBeerPlusBtnClick(View v) {
 		bartender.addBeer();
 		beerCount.setText(bartender.getBeerCountAsString());
 	}
-	
-	public void onSodaPlusBtnClick(View v){
+
+	public void onSodaPlusBtnClick(View v) {
 		bartender.addSoda();
 		sodaCount.setText(bartender.getSodaCountAsString());
 	}
-	
-	public void onBeerMinusBtnClick(View v){
+
+	public void onBeerMinusBtnClick(View v) {
 		bartender.removeBeer();
 		beerCount.setText(bartender.getBeerCountAsString());
 	}
-	
-	public void onSodaMinusBtnClick(View v){
+
+	public void onSodaMinusBtnClick(View v) {
 		bartender.removeSoda();
 		sodaCount.setText(bartender.getSodaCountAsString());
 	}
-	
-	public void onSaveBtnClick(View v){
-		
+
+	public void onSaveBtnClick(View v) {
+
+	}
+
+	@Override
+	protected void onSaveInstanceState(final Bundle outState) {
+		super.onSaveInstanceState(outState);
+		outState.putSerializable(Bartender.TAG, bartender);
+	}
+
+	public void reset() {
+		bartender.resetCounts();
 	}
 }
