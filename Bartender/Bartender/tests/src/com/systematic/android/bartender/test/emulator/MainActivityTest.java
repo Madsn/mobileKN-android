@@ -4,6 +4,7 @@ package com.systematic.android.bartender.test.emulator;
 import com.systematic.android.bartender.MainActivity;
 import com.systematic.android.bartender.R;
 
+import android.app.Instrumentation;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.test.ActivityInstrumentationTestCase2;
@@ -16,6 +17,7 @@ public class MainActivityTest extends
 		ActivityInstrumentationTestCase2<MainActivity> {
 	
 	MainActivity activity;
+
 	Button addBeerBtn;
 	Button minusBeerBtn;
 	Button addSodaBtn;
@@ -32,7 +34,8 @@ public class MainActivityTest extends
 	@Override
 	public void setUp() throws Exception {
 		super.setUp();
-		activity = getActivity();
+		activity = this.getActivity();
+		
 		addBeerBtn = (Button) activity.findViewById(R.id.beer_plus_btn);
 		minusBeerBtn = (Button) activity.findViewById(R.id.beer_minus_btn);
 		addSodaBtn = (Button) activity.findViewById(R.id.soda_plus_btn);
@@ -41,15 +44,12 @@ public class MainActivityTest extends
 		saveBtn = (Button) activity.findViewById(R.id.save_btn);
 		beerCount = (TextView) activity.findViewById(R.id.beer_count);
 		sodaCount = (TextView) activity.findViewById(R.id.soda_count);
-		activity.reset();
 	}
 	
-	private int getSodaCount(){
-		return Integer.parseInt(sodaCount.getText().toString());
-	}
-	
-	private int getBeerCount(){
-		return Integer.parseInt(beerCount.getText().toString());
+	@Override
+	public void tearDown() throws Exception {
+		activity.resetBartender();
+		super.tearDown();
 	}
 	
 	@UiThreadTest
@@ -75,27 +75,43 @@ public class MainActivityTest extends
 	}
 	
 	@UiThreadTest
-	public void IGNOREtestCountersKeptOnOrientationChange(){
+	public void testStateDestroy() {
 		multipleClicks(addBeerBtn, 5);
+		assertEquals("Beercount before destroying activity", 5, getBeerCount());
 		
-		assertEquals("Before rotating", 5, getBeerCount());
-		assertEquals("Before rotating", ActivityInfo.SCREEN_ORIENTATION_PORTRAIT, activity.getResources().getConfiguration().orientation);
+		activity.finish();
+		activity = this.getActivity();
 		
-		activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+		addBeerBtn.performClick();
+		assertEquals("Beercount after recreating activity", 6, getBeerCount());
+	}
+	
+	@UiThreadTest
+	public void testStatePause() {
+		multipleClicks(addBeerBtn, 5);
+		assertEquals("Beercount before pausing activity", 5, getBeerCount());
 		
-		assertEquals("After rotating to landscape", 5, getBeerCount());
-		assertEquals("After rotating to landscape", ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE, activity.getResources().getConfiguration().orientation);
+		// Pause activity and modify data
+		this.getInstrumentation().callActivityOnPause(activity);
+		minusBeerBtn.performClick();
 		
-		activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-		
-		assertEquals("After rotating back to portrait", 5, getBeerCount());
-		assertEquals("After rotating back to portrait", ActivityInfo.SCREEN_ORIENTATION_PORTRAIT, activity.getResources().getConfiguration().orientation);
+		// Verify that UI is in sync with data on resume
+		this.getInstrumentation().callActivityOnResume(activity);
+		assertEquals("Beercount after resuming activity", 4, getBeerCount());
 	}
 
 	private void multipleClicks(Button button, int i) {
 		for (;i>0;i--){
 			button.performClick();
 		}
+	}
+	
+	private int getSodaCount(){
+		return Integer.parseInt(sodaCount.getText().toString());
+	}
+	
+	private int getBeerCount(){
+		return Integer.parseInt(beerCount.getText().toString());
 	}
 
 }

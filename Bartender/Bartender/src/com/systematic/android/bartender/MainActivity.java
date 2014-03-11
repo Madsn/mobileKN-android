@@ -27,7 +27,7 @@ public class MainActivity extends Activity {
 		updateGUI();
 	}
 
-	private void updateGUI() {
+	public void updateGUI() {
 		beerCount.setText(bartender.getBeerCountAsString());
 		sodaCount.setText(bartender.getSodaCountAsString());
 		initials.setText(bartender.getInitials());
@@ -69,8 +69,15 @@ public class MainActivity extends Activity {
 		super.onSaveInstanceState(outState);
 		outState.putSerializable(Bartender.TAG, bartender);
 	}
+	
+	@Override
+	protected void onResume() {
+		super.onResume();
+		updateGUI();
+	}
 
-	public void reset() {
+	public void resetBartender() {
 		bartender.resetCounts();
 	}
+
 }
