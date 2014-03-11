@@ -30,8 +30,12 @@ public class MainActivity extends Activity {
 		sodaCount = (TextView) findViewById(R.id.soda_count);
 		beerCount = (TextView) findViewById(R.id.beer_count);
 		initials = (EditText) findViewById(R.id.initials_edittext);
-
-		bartab = new Bartab();
+		
+		if (savedInstanceState == null){
+			bartab = new Bartab();
+		} else {
+			bartab = (Bartab) savedInstanceState.getSerializable(Bartab.TAG);
+		}
 		updateGUI();
 	}
 

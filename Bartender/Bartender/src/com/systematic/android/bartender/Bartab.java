@@ -7,7 +7,7 @@ public class Bartab implements Serializable {
 
 	private static final long serialVersionUID = 4631878964182806525L;
 
-	public static final String TAG = "BartenderObj";
+	public static final String TAG = "BartabObj";
 	
 	private long id;
 	
