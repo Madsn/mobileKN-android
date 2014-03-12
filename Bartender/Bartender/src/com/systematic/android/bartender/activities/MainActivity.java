@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.systematic.android.bartender.Bartab;
 import com.systematic.android.bartender.BartabDataSource;
+import com.systematic.android.bartender.GlobalSettings;
 import com.systematic.android.bartender.dbHelper;
 import com.systematic.android.bartender.R;
 
@@ -20,6 +21,7 @@ public class MainActivity extends Activity {
 	TextView sodaCount, beerCount;
 	EditText initials;
 	Bartab bartab;
+	GlobalSettings globals;
 	
 	private BartabDataSource dbsource;
 
@@ -31,6 +33,9 @@ public class MainActivity extends Activity {
 		sodaCount = (TextView) findViewById(R.id.soda_count);
 		beerCount = (TextView) findViewById(R.id.beer_count);
 		initials = (EditText) findViewById(R.id.initials_edittext);
+		
+		globals = GlobalSettings.getInstance();
+		globals.setLocale(getResources().getConfiguration().locale);
 		
 		if (savedInstanceState == null){
 			bartab = new Bartab();

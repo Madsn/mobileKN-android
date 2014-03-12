@@ -26,7 +26,7 @@ public class HistoryActivity extends ListActivity {
 		dbsource = new BartabDataSource(this);
 		dbsource.open();
 
-		List<Bartab> values = dbsource.findAllBartabs();
+		List<Bartab> values = dbsource.findAllBartabsSortedByDate("DESC");
 
 		ArrayAdapter<Bartab> adapter = new ArrayAdapter<Bartab>(this,
 				android.R.layout.simple_list_item_1, values);

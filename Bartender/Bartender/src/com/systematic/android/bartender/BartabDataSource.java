@@ -5,6 +5,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -57,10 +58,10 @@ public class BartabDataSource {
 		Log.d(TAG, "Deleted bartab with ID: " + id);
 	}
 	
-	public List<Bartab> findBartabsWithFilter(String filter) {
+	public List<Bartab> findBartabs(String filter, String orderBy) {
 		List<Bartab> bartabs = new ArrayList<Bartab>();
 		Cursor c = database.query(dbHelper.TABLE_BARTABS, allColumns, null, null,
-				null, filter, null);
+				null, filter, orderBy);
 		c.moveToFirst();
 		while(!c.isAfterLast()) {
 			Bartab tab = cursorToBartab(c);
@@ -73,11 +74,16 @@ public class BartabDataSource {
 
 	public List<Bartab> findBartabsForUser(String initials) {
 		String filter = dbHelper.COLUMN_INITIALS + " = " + initials.toLowerCase();
-		return findBartabsWithFilter(filter);
+		return findBartabs(filter, null);
 	}
 	
 	public List<Bartab> findAllBartabs() {
-		return findBartabsWithFilter(null);
+		return findBartabs(null, null);
+	}
+	
+	public List<Bartab> findAllBartabsSortedByDate(String direction) {
+		String orderBy = dbHelper.COLUMN_CREATED_AT + " " + direction;
+		return findBartabs(null, orderBy);
 	}
 
 	private Bartab cursorToBartab(Cursor c) {
@@ -85,6 +91,7 @@ public class BartabDataSource {
 		tab.setId(c.getLong(c.getColumnIndex(dbHelper.COLUMN_ID)));
 		tab.setBeerCount(c.getInt(c.getColumnIndex(dbHelper.COLUMN_BEERS)));
 		tab.setSodaCount(c.getInt(c.getColumnIndex(dbHelper.COLUMN_SODAS)));
+		tab.setInitials(c.getString(c.getColumnIndex(dbHelper.COLUMN_INITIALS)));
 		String createdAt = c.getString(c.getColumnIndex(dbHelper.COLUMN_CREATED_AT));
 		String lastEdited = c.getString(c.getColumnIndex(dbHelper.COLUMN_LAST_EDITED));
 		try {

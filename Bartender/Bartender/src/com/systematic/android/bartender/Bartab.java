@@ -3,30 +3,43 @@ package com.systematic.android.bartender;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
-import android.text.format.DateFormat;
+import java.text.DateFormat;
 
 public class Bartab implements Serializable {
 
 	private static final long serialVersionUID = 4631878964182806525L;
 
 	public static final String TAG = "BartabObj";
-	
+
 	private long id;
-	
+
 	private int beerCount;
 	private int sodaCount;
 	private String initials;
 
 	private Date createdAt;
 	private Date lastEditedAt;
-	
+	private DateFormat mediumDf;
+
 	public Bartab() {
 		this.beerCount = 0;
 		this.sodaCount = 0;
 		this.initials = "";
+		GlobalSettings settings = GlobalSettings.getInstance();
+		mediumDf = DateFormat.getDateTimeInstance(DateFormat.MEDIUM,
+				DateFormat.MEDIUM, settings.getLocale());
 	}
-	
+
+	public Bartab(Locale locale) {
+		this.beerCount = 0;
+		this.sodaCount = 0;
+		this.initials = "";
+		mediumDf = DateFormat.getDateTimeInstance(DateFormat.MEDIUM,
+				DateFormat.SHORT, locale);
+	}
+
 	public String getBeerCountAsString() {
 		return Integer.toString(beerCount);
 	}
@@ -66,8 +79,8 @@ public class Bartab implements Serializable {
 			return; // Don't allow negative numbers
 		sodaCount = newCount;
 	}
-	
-	public void resetAll(){
+
+	public void resetAll() {
 		beerCount = 0;
 		sodaCount = 0;
 		initials = "";
@@ -100,18 +113,19 @@ public class Bartab implements Serializable {
 	public void setId(long id) {
 		this.id = id;
 	}
-	
+
 	// for display in listview
 	@Override
 	public String toString() {
-		// TODO: i18n
-		return this.createdAt.toString() + "\n" + beerCount + " øl, " + sodaCount + " vand";  
+		// TODO: i18n/get strings from strings.xml
+		return mediumDf.format(createdAt) + "\n" + initials + ": \t" + beerCount
+				+ " øl \t" + sodaCount + " vand";
 	}
 
 	public int getBeerCount() {
 		return beerCount;
 	}
-	
+
 	public int getSodaCount() {
 		return sodaCount;
 	}

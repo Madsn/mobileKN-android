@@ -1,5 +1,7 @@
 package com.systematic.android.bartender.test.jvm;
 
+import java.util.Locale;
+
 import junit.framework.TestCase;
 
 import com.systematic.android.bartender.Bartab;
@@ -16,7 +18,7 @@ public class BartabUnitTest extends TestCase {
 	@Override
 	protected void setUp() throws Exception {
 		super.setUp();
-		bartab = new Bartab();
+		bartab = new Bartab(Locale.getDefault());
 	}
 	
 	private int getBeerCount(){
