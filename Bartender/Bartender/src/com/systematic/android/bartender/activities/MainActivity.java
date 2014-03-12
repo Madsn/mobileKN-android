@@ -79,9 +79,14 @@ public class MainActivity extends Activity {
 		bartab.setCreatedAt(curDate);
 		bartab.setLastEditedAt(curDate);
 		bartab.setInitials(initials.getText().toString());
+		
 		dbsource.open();
 		dbsource.saveBartab(bartab);
 		dbsource.close();
+		
+		bartab.resetAll();
+		Intent intent = new Intent(this, HistoryActivity.class);
+		startActivity(intent);
 	}
 
 	@Override

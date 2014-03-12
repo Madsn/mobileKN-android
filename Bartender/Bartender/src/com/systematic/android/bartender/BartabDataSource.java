@@ -1,6 +1,5 @@
 package com.systematic.android.bartender;
 
-import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -42,7 +41,7 @@ public class BartabDataSource {
 		ContentValues values = new ContentValues();
 		values.put(dbHelper.COLUMN_BEERS, tab.getBeerCount());
 		values.put(dbHelper.COLUMN_SODAS, tab.getSodaCount());
-		values.put(dbHelper.COLUMN_INITIALS, tab.getInitials());
+		values.put(dbHelper.COLUMN_INITIALS, tab.getInitials().toLowerCase());
 		values.put(dbHelper.COLUMN_CREATED_AT, df.format(tab.getCreatedAt()));
 		values.put(dbHelper.COLUMN_LAST_EDITED,
 				df.format(tab.getLastEditedAt()));
@@ -57,11 +56,11 @@ public class BartabDataSource {
 					+ id, null);
 		Log.d(TAG, "Deleted bartab with ID: " + id);
 	}
-
-	public List<Bartab> findBartabsForUser(String initials) {
+	
+	public List<Bartab> findBartabsWithFilter(String filter) {
 		List<Bartab> bartabs = new ArrayList<Bartab>();
 		Cursor c = database.query(dbHelper.TABLE_BARTABS, allColumns, null, null,
-				null, null, null);
+				null, filter, null);
 		c.moveToFirst();
 		while(!c.isAfterLast()) {
 			Bartab tab = cursorToBartab(c);
@@ -70,6 +69,15 @@ public class BartabDataSource {
 		}
 		c.close();
 		return bartabs;
+	}
+
+	public List<Bartab> findBartabsForUser(String initials) {
+		String filter = dbHelper.COLUMN_INITIALS + " = " + initials.toLowerCase();
+		return findBartabsWithFilter(filter);
+	}
+	
+	public List<Bartab> findAllBartabs() {
+		return findBartabsWithFilter(null);
 	}
 
 	private Bartab cursorToBartab(Cursor c) {
