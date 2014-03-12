@@ -5,10 +5,10 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-public class DatabaseHelper extends SQLiteOpenHelper {
+public class dbHelper extends SQLiteOpenHelper {
 
 	public static final String TABLE_BARTABS = "bartabs";
-	public static final String COLUMN_ID = "_id";
+	public static final String COLUMN_ID = "id";
 	public static final String COLUMN_INITIALS = "initials";
 	public static final String COLUMN_BEERS = "beers";
 	public static final String COLUMN_SODAS = "sodas";
@@ -19,15 +19,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	private static final int DATABASE_VERSION = 1;
 	
 	private static final String DATABASE_CREATE = "create table "
-			+ TABLE_BARTABS + "(" 
+			+ TABLE_BARTABS + " (" 
 			+ COLUMN_ID	+ " integer primary key autoincrement, "
 			+ COLUMN_INITIALS + " text not null, "
 			+ COLUMN_BEERS + " integer not null default 0, "
 			+ COLUMN_SODAS + " integer not null default 0, "
-			+ COLUMN_CREATED_AT + " date not null default GETDATE(), "
-			+ COLUMN_LAST_EDITED + " date not null default GETDATE()";
+			+ COLUMN_CREATED_AT + " text not null, "
+			+ COLUMN_LAST_EDITED + " text not null" 
+			+ ");";
 
-	public DatabaseHelper(Context context) {
+	public dbHelper(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
 	}
 
@@ -38,7 +39,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-		Log.w(DatabaseHelper.class.getName(),
+		Log.w(dbHelper.class.getName(),
 		        "Upgrading database from version " + oldVersion + " to "
 		            + newVersion + ", which will destroy all old data");
 		    db.execSQL("DROP TABLE IF EXISTS " + TABLE_BARTABS);

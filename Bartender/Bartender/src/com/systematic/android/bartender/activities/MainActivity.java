@@ -2,25 +2,26 @@ package com.systematic.android.bartender.activities;
 
 import java.util.Date;
 
-import com.systematic.android.bartender.Bartab;
-import com.systematic.android.bartender.R;
-import com.systematic.android.bartender.R.id;
-import com.systematic.android.bartender.R.layout;
-import com.systematic.android.bartender.R.menu;
-
-import android.os.Bundle;
 import android.app.Activity;
-import android.util.Log;
+import android.content.Intent;
+import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import com.systematic.android.bartender.Bartab;
+import com.systematic.android.bartender.BartabDataSource;
+import com.systematic.android.bartender.dbHelper;
+import com.systematic.android.bartender.R;
 
 public class MainActivity extends Activity {
 
 	TextView sodaCount, beerCount;
 	EditText initials;
 	Bartab bartab;
+	
+	private BartabDataSource dbsource;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +37,7 @@ public class MainActivity extends Activity {
 		} else {
 			bartab = (Bartab) savedInstanceState.getSerializable(Bartab.TAG);
 		}
+		dbsource = new BartabDataSource(this);
 		updateGUI();
 	}
 
@@ -76,12 +78,17 @@ public class MainActivity extends Activity {
 		Date curDate = new Date();
 		bartab.setCreatedAt(curDate);
 		bartab.setLastEditedAt(curDate);
+		bartab.setInitials(initials.getText().toString());
+		dbsource.open();
+		dbsource.saveBartab(bartab);
+		dbsource.close();
 	}
 
 	@Override
 	protected void onSaveInstanceState(final Bundle outState) {
 		super.onSaveInstanceState(outState);
 		outState.putSerializable(Bartab.TAG, bartab);
+		
 	}
 	
 	@Override

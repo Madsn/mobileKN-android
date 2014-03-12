@@ -1,7 +1,10 @@
 package com.systematic.android.bartender;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+
+import android.text.format.DateFormat;
 
 public class Bartab implements Serializable {
 
@@ -103,6 +106,18 @@ public class Bartab implements Serializable {
 	public String toString() {
 		// TODO: i18n
 		return this.createdAt.toString() + "\n" + beerCount + " øl, " + sodaCount + " vand";  
+	}
+
+	public int getBeerCount() {
+		return beerCount;
+	}
+	
+	public int getSodaCount() {
+		return sodaCount;
+	}
+
+	public void setInitials(String initials) {
+		this.initials = initials;
 	}
 
 }
