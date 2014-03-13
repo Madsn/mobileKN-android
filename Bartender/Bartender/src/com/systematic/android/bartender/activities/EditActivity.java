@@ -104,6 +104,16 @@ public class EditActivity extends Activity {
 		startActivity(intent);
 		finish();
 	}
+	
+	public void onDeleteBtnClick(View v) {
+		dbsource.open();
+		dbsource.deleteBartab(tab);
+		dbsource.close();
+		
+		Intent intent = new Intent(this, HistoryActivity.class);
+		startActivity(intent);
+		finish();
+	}
 
 	@Override
 	protected void onSaveInstanceState(final Bundle outState) {

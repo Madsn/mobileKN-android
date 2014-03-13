@@ -11,5 +11,6 @@
     <string name="save_edit_btn_text">Gem ændringer</string>
     <string name="edit_header_label">Redigerer registrering fra -</string>
     <string name="saved_by_label">Oprettet af</string>
-
+    <string name="delete_edit_btn_text">Slet</string>
+    
 </resources>

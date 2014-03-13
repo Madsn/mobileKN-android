@@ -165,5 +165,12 @@
             android:layout_weight="1"
             android:text="@string/save_edit_btn_text"
             android:onClick="onSaveBtnClick" />
+        
+        <Button
+            android:id="@+id/save_edit_btn"
+            android:layout_width="match_parent"
+            android:layout_weight="1"
+            android:text="@string/delete_edit_btn_text"
+            android:onClick="onDeleteBtnClick" />
     </TableRow>
 </LinearLayout>
