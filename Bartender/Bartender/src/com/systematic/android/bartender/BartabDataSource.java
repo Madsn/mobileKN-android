@@ -120,4 +120,8 @@ public class BartabDataSource {
 		return tab;
 	}
 
+	public void deleteAllBartabs() {
+		database.delete(dbHelper.TABLE_BARTABS, null, null);
+	}
+
 }

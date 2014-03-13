@@ -93,6 +93,11 @@ public class MainActivity extends Activity {
 		Intent intent = new Intent(this, HistoryActivity.class);
 		startActivity(intent);
 	}
+	
+	public void onHistoryBtnClick(View v) {
+		Intent intent = new Intent(this, HistoryActivity.class);
+		startActivity(intent);
+	}
 
 	@Override
 	protected void onSaveInstanceState(final Bundle outState) {

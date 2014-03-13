@@ -13,6 +13,7 @@ import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
@@ -32,13 +33,19 @@ public class HistoryActivity extends ListActivity {
 		setContentView(R.layout.activity_history);
 
 		dbsource = new BartabDataSource(this);
+		
+		
+		initializeAdapter();
+	}
+	
+	private void initializeAdapter(){
 		dbsource.open();
-
 		List<Bartab> values = dbsource.findAllBartabsSortedByDate("DESC");
 
 		adapter = new ArrayAdapter<Bartab>(this,
 				android.R.layout.simple_list_item_1, values);
 		setListAdapter(adapter);
+		dbsource.close();
 	}
 	
 	@Override
@@ -73,8 +80,21 @@ public class HistoryActivity extends ListActivity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.main, menu);
+		getMenuInflater().inflate(R.menu.history, menu);
 		return true;
+	}
+	
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.action_delete_all:
+			dbsource.open();
+			dbsource.deleteAllBartabs();
+			dbsource.close();
+			initializeAdapter();
+			return true;
+		default:
+			return super.onOptionsItemSelected(item);
+		}
 	}
 
 }

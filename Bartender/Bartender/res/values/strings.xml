@@ -12,5 +12,6 @@
     <string name="edit_header_label">Redigerer registrering fra -</string>
     <string name="saved_by_label">Oprettet af</string>
     <string name="delete_edit_btn_text">Slet</string>
-    
+    <string name="history_btn_text">Se historik</string>
+    <string name="action_delete_all">Slet ALT</string>
 </resources>
