@@ -8,7 +8,7 @@ import android.util.Log;
 public class dbHelper extends SQLiteOpenHelper {
 
 	public static final String TABLE_BARTABS = "bartabs";
-	public static final String COLUMN_ID = "id";
+	public static final String COLUMN_ID = "_id";
 	public static final String COLUMN_INITIALS = "initials";
 	public static final String COLUMN_BEERS = "beers";
 	public static final String COLUMN_SODAS = "sodas";
@@ -16,7 +16,7 @@ public class dbHelper extends SQLiteOpenHelper {
 	public static final String COLUMN_LAST_EDITED = "last_edited";
 
 	private static final String DATABASE_NAME = "bartabs.db";
-	private static final int DATABASE_VERSION = 1;
+	private static final int DATABASE_VERSION = 2;
 	
 	private static final String DATABASE_CREATE = "create table "
 			+ TABLE_BARTABS + " (" 

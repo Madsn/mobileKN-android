@@ -23,6 +23,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".activities.HistoryActivity"></activity>
+        <activity android:name=".activities.EditActivity"></activity>
     </application>
 
 </manifest>

@@ -10,13 +10,21 @@ import com.systematic.android.bartender.R.menu;
 
 import android.app.Activity;
 import android.app.ListActivity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
+import android.widget.ListView;
 
 public class HistoryActivity extends ListActivity {
+	
+	public final static String EDIT_MESSAGE = "com.systematic.android.bartender.EDIT_MESSAGE";
 
 	private BartabDataSource dbsource;
+
+	private ArrayAdapter<Bartab> adapter;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -28,9 +36,20 @@ public class HistoryActivity extends ListActivity {
 
 		List<Bartab> values = dbsource.findAllBartabsSortedByDate("DESC");
 
-		ArrayAdapter<Bartab> adapter = new ArrayAdapter<Bartab>(this,
+		adapter = new ArrayAdapter<Bartab>(this,
 				android.R.layout.simple_list_item_1, values);
 		setListAdapter(adapter);
+	}
+	
+	@Override
+	protected void onListItemClick(ListView l, View v, int position, long id){
+		super.onListItemClick(l, v, position, id);
+		Bartab tab = (Bartab) getListAdapter().getItem(position);
+		Intent intent = new Intent(this, EditActivity.class);
+		intent.putExtra(EDIT_MESSAGE, tab.getId());
+		startActivity(intent);
+		dbsource.close();
+		finish();
 	}
 
 	@Override
@@ -43,6 +62,12 @@ public class HistoryActivity extends ListActivity {
 	protected void onPause() {
 		dbsource.close();
 		super.onPause();
+	}
+	
+	@Override
+	protected void onDestroy() {
+		dbsource.close();
+		super.onDestroy();
 	}
 
 	@Override

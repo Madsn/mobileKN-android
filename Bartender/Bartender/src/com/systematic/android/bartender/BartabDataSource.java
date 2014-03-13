@@ -46,7 +46,15 @@ public class BartabDataSource {
 		values.put(dbHelper.COLUMN_CREATED_AT, df.format(tab.getCreatedAt()));
 		values.put(dbHelper.COLUMN_LAST_EDITED,
 				df.format(tab.getLastEditedAt()));
-		database.insert(dbHelper.TABLE_BARTABS, null, values);
+		Long id = tab.getId();
+		if (id == null) {
+			Log.v(TAG, "Inserting new row");
+			database.insert(dbHelper.TABLE_BARTABS, null, values);
+		} else {
+			Log.v(TAG, "Updating existing row for ID: " + id);
+			String whereClause = dbHelper.COLUMN_ID + " = " + id.toString();
+			database.update(dbHelper.TABLE_BARTABS, values, whereClause, null);
+		}
 	}
 
 	public void deleteBartab(Bartab tab) {
@@ -57,13 +65,13 @@ public class BartabDataSource {
 					+ id, null);
 		Log.d(TAG, "Deleted bartab with ID: " + id);
 	}
-	
+
 	public List<Bartab> findBartabs(String filter, String orderBy) {
 		List<Bartab> bartabs = new ArrayList<Bartab>();
-		Cursor c = database.query(dbHelper.TABLE_BARTABS, allColumns, null, null,
-				null, filter, orderBy);
+		Cursor c = database.query(dbHelper.TABLE_BARTABS, allColumns, null,
+				null, dbHelper.COLUMN_ID, filter, orderBy);
 		c.moveToFirst();
-		while(!c.isAfterLast()) {
+		while (!c.isAfterLast()) {
 			Bartab tab = cursorToBartab(c);
 			bartabs.add(tab);
 			c.moveToNext();
@@ -73,17 +81,23 @@ public class BartabDataSource {
 	}
 
 	public List<Bartab> findBartabsForUser(String initials) {
-		String filter = dbHelper.COLUMN_INITIALS + " = " + initials.toLowerCase();
-		return findBartabs(filter, null);
+		String filter = dbHelper.COLUMN_INITIALS + " = "
+				+ initials.toLowerCase();
+		return findBartabs(filter, dbHelper.COLUMN_CREATED_AT);
 	}
-	
+
 	public List<Bartab> findAllBartabs() {
 		return findBartabs(null, null);
 	}
-	
+
 	public List<Bartab> findAllBartabsSortedByDate(String direction) {
 		String orderBy = dbHelper.COLUMN_CREATED_AT + " " + direction;
 		return findBartabs(null, orderBy);
+	}
+
+	public Bartab getBartabById(Long id) {
+		String filter = dbHelper.COLUMN_ID + " = " + id.toString();
+		return findBartabs(filter, dbHelper.COLUMN_ID).get(0);
 	}
 
 	private Bartab cursorToBartab(Cursor c) {
@@ -92,14 +106,16 @@ public class BartabDataSource {
 		tab.setBeerCount(c.getInt(c.getColumnIndex(dbHelper.COLUMN_BEERS)));
 		tab.setSodaCount(c.getInt(c.getColumnIndex(dbHelper.COLUMN_SODAS)));
 		tab.setInitials(c.getString(c.getColumnIndex(dbHelper.COLUMN_INITIALS)));
-		String createdAt = c.getString(c.getColumnIndex(dbHelper.COLUMN_CREATED_AT));
-		String lastEdited = c.getString(c.getColumnIndex(dbHelper.COLUMN_LAST_EDITED));
+		String createdAt = c.getString(c
+				.getColumnIndex(dbHelper.COLUMN_CREATED_AT));
+		String lastEdited = c.getString(c
+				.getColumnIndex(dbHelper.COLUMN_LAST_EDITED));
 		try {
 			tab.setCreatedAt(df.parse(createdAt));
 			tab.setLastEditedAt(df.parse(lastEdited));
 		} catch (ParseException e) {
-			Log.e(TAG, "Failed to parse either created at timestamp: " + createdAt
-					+ " or last edited timestamp: " + lastEdited);
+			Log.e(TAG, "Failed to parse either created at timestamp: "
+					+ createdAt + " or last edited timestamp: " + lastEdited);
 		}
 		return tab;
 	}
