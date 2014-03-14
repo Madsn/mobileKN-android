@@ -14,5 +14,10 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent" >
     </ListView>
+    
+    <TextView android:id="@android:id/empty"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:text="@string/no_history" />
 
 </LinearLayout>

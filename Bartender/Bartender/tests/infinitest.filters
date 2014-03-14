@@ -1,1 +1,2 @@
 com\.systematic\.android\.bartender\.test\.emulator\..*
+com\.systematic\.android\.bartender\.test\.mocks\..*

@@ -2,11 +2,13 @@ package com.systematic.android.bartender.activities;
 
 import java.util.List;
 
-import com.systematic.android.bartender.Bartab;
-import com.systematic.android.bartender.BartabDataSource;
+
 import com.systematic.android.bartender.R;
 import com.systematic.android.bartender.R.layout;
 import com.systematic.android.bartender.R.menu;
+import com.systematic.android.bartender.data.Bartab;
+import com.systematic.android.bartender.data.BartabDataSource;
+
 
 import android.app.Activity;
 import android.app.ListActivity;
@@ -26,6 +28,7 @@ public class HistoryActivity extends ListActivity {
 	private BartabDataSource dbsource;
 
 	private ArrayAdapter<Bartab> adapter;
+	
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -34,11 +37,10 @@ public class HistoryActivity extends ListActivity {
 
 		dbsource = new BartabDataSource(this);
 		
-		
 		initializeAdapter();
 	}
 	
-	private void initializeAdapter(){
+	public void initializeAdapter(){
 		dbsource.open();
 		List<Bartab> values = dbsource.findAllBartabsSortedByDate("DESC");
 
@@ -87,14 +89,18 @@ public class HistoryActivity extends ListActivity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.action_delete_all:
-			dbsource.open();
-			dbsource.deleteAllBartabs();
-			dbsource.close();
-			initializeAdapter();
+			deleteAll();
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);
 		}
+	}
+
+	private void deleteAll() {
+		dbsource.open();
+		dbsource.deleteAllBartabs();
+		dbsource.close();
+		initializeAdapter();
 	}
 
 }

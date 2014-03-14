@@ -1,11 +1,11 @@
-package com.systematic.android.bartender;
+package com.systematic.android.bartender.data;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-public class dbHelper extends SQLiteOpenHelper {
+public class DbHelper extends SQLiteOpenHelper {
 
 	public static final String TABLE_BARTABS = "bartabs";
 	public static final String COLUMN_ID = "_id";
@@ -28,7 +28,7 @@ public class dbHelper extends SQLiteOpenHelper {
 			+ COLUMN_LAST_EDITED + " text not null" 
 			+ ");";
 
-	public dbHelper(Context context) {
+	public DbHelper(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
 	}
 
@@ -39,7 +39,7 @@ public class dbHelper extends SQLiteOpenHelper {
 
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-		Log.w(dbHelper.class.getName(),
+		Log.w(DbHelper.class.getName(),
 		        "Upgrading database from version " + oldVersion + " to "
 		            + newVersion + ", which will destroy all old data");
 		    db.execSQL("DROP TABLE IF EXISTS " + TABLE_BARTABS);

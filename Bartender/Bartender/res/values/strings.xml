@@ -14,4 +14,5 @@
     <string name="delete_edit_btn_text">Slet</string>
     <string name="history_btn_text">Se historik</string>
     <string name="action_delete_all">Slet ALT</string>
+    <string name="no_history">Historik databasen er tom</string>
 </resources>

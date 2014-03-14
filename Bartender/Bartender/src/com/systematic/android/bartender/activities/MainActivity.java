@@ -10,18 +10,18 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.systematic.android.bartender.Bartab;
-import com.systematic.android.bartender.BartabDataSource;
 import com.systematic.android.bartender.GlobalSettings;
-import com.systematic.android.bartender.dbHelper;
 import com.systematic.android.bartender.R;
+import com.systematic.android.bartender.data.Bartab;
+import com.systematic.android.bartender.data.BartabDataSource;
+import com.systematic.android.bartender.data.DbHelper;
+
 
 public class MainActivity extends Activity {
 
 	TextView sodaCount, beerCount;
 	EditText initials;
 	Bartab bartab;
-	GlobalSettings globals;
 	
 	private BartabDataSource dbsource;
 
@@ -34,11 +34,8 @@ public class MainActivity extends Activity {
 		beerCount = (TextView) findViewById(R.id.beer_count);
 		initials = (EditText) findViewById(R.id.initials_edittext);
 		
-		globals = GlobalSettings.getInstance();
-		globals.setLocale(getResources().getConfiguration().locale);
-		
 		if (savedInstanceState == null){
-			bartab = new Bartab();
+			bartab = new Bartab(getResources().getConfiguration().locale);
 		} else {
 			bartab = (Bartab) savedInstanceState.getSerializable(Bartab.TAG);
 		}
@@ -80,9 +77,6 @@ public class MainActivity extends Activity {
 	}
 
 	public void onSaveBtnClick(View v) {
-		Date curDate = new Date();
-		bartab.setCreatedAt(curDate);
-		bartab.setLastEditedAt(curDate);
 		bartab.setInitials(initials.getText().toString());
 		
 		dbsource.open();

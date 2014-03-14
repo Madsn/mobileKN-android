@@ -1,4 +1,4 @@
-package com.systematic.android.bartender;
+package com.systematic.android.bartender.data;
 
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
@@ -7,37 +7,35 @@ import java.util.Locale;
 
 import java.text.DateFormat;
 
+import com.systematic.android.bartender.GlobalSettings;
+
+
 public class Bartab implements Serializable {
 
 	private static final long serialVersionUID = 4631878964182806525L;
 
 	public static final String TAG = "BartabObj";
 
-	private Long id;
+	protected Long id;
 
-	private int beerCount;
-	private int sodaCount;
-	private String initials;
+	protected int beerCount;
+	protected int sodaCount;
+	protected String initials;
 
-	private Date createdAt;
-	private Date lastEditedAt;
-	private DateFormat mediumDf;
-
+	protected Date createdAt;
+	protected Date lastEditedAt;
+	protected DateFormat mediumDf;
+	
 	public Bartab() {
-		this.beerCount = 0;
-		this.sodaCount = 0;
-		this.initials = "";
-		GlobalSettings settings = GlobalSettings.getInstance();
-		mediumDf = DateFormat.getDateTimeInstance(DateFormat.MEDIUM,
-				DateFormat.MEDIUM, settings.getLocale());
+		this(Locale.getDefault());
 	}
-
+	
 	public Bartab(Locale locale) {
 		this.beerCount = 0;
 		this.sodaCount = 0;
 		this.initials = "";
 		mediumDf = DateFormat.getDateTimeInstance(DateFormat.MEDIUM,
-				DateFormat.SHORT, locale);
+				DateFormat.MEDIUM, locale);
 	}
 
 	public String getBeerCountAsString() {

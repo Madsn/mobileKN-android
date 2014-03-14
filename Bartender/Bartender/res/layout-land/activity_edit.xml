@@ -94,7 +94,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="fill_horizontal"
-        android:layout_weight="2"
+        android:layout_weight="1"
         android:orientation="vertical"
         android:weightSum="2" >
 
@@ -142,14 +142,25 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:gravity="center_vertical" >
+            android:gravity="center_vertical"
+            android:orientation="horizontal" >
+            
+            <Button
+                android:id="@+id/save_edit_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:onClick="onDeleteBtnClick"
+                android:text="@string/delete_edit_btn_text" />
 
             <Button
                 android:id="@+id/save_btn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/save_edit_btn_text"
-                android:onClick="onSaveBtnClick" />
+                android:layout_weight="1"
+                android:onClick="onSaveBtnClick"
+                android:text="@string/save_edit_btn_text" />
+
         </LinearLayout>
     </LinearLayout>
 

@@ -1,9 +1,10 @@
-package com.systematic.android.bartender;
+package com.systematic.android.bartender.data;
 
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -20,14 +21,17 @@ public class BartabDataSource {
 
 	private SQLiteDatabase database;
 	DateFormat df = new SimpleDateFormat("dd/MM/yyy HH:mm:ss");
-	private dbHelper dbHelper;
+	private DbHelper dbHelper;
 	private String[] allColumns = { dbHelper.COLUMN_ID,
 			dbHelper.COLUMN_INITIALS, dbHelper.COLUMN_BEERS,
 			dbHelper.COLUMN_SODAS, dbHelper.COLUMN_CREATED_AT,
 			dbHelper.COLUMN_LAST_EDITED };
 
+	private Locale locale;
+
 	public BartabDataSource(Context context) {
-		dbHelper = new dbHelper(context);
+		dbHelper = new DbHelper(context);
+		this.locale = context.getResources().getConfiguration().locale;
 	}
 
 	public void open() throws SQLException {
@@ -43,9 +47,14 @@ public class BartabDataSource {
 		values.put(dbHelper.COLUMN_BEERS, tab.getBeerCount());
 		values.put(dbHelper.COLUMN_SODAS, tab.getSodaCount());
 		values.put(dbHelper.COLUMN_INITIALS, tab.getInitials().toLowerCase());
-		values.put(dbHelper.COLUMN_CREATED_AT, df.format(tab.getCreatedAt()));
-		values.put(dbHelper.COLUMN_LAST_EDITED,
-				df.format(tab.getLastEditedAt()));
+		Date currentTime = new Date();
+		if (tab.getCreatedAt() == null) {
+			values.put(dbHelper.COLUMN_CREATED_AT, df.format(currentTime));
+		} else {
+			values.put(dbHelper.COLUMN_CREATED_AT,
+					df.format(tab.getCreatedAt()));
+		}
+		values.put(dbHelper.COLUMN_LAST_EDITED, df.format(currentTime));
 		Long id = tab.getId();
 		if (id == null) {
 			Log.v(TAG, "Inserting new row");
@@ -101,7 +110,7 @@ public class BartabDataSource {
 	}
 
 	private Bartab cursorToBartab(Cursor c) {
-		Bartab tab = new Bartab();
+		Bartab tab = new Bartab(locale);
 		tab.setId(c.getLong(c.getColumnIndex(dbHelper.COLUMN_ID)));
 		tab.setBeerCount(c.getInt(c.getColumnIndex(dbHelper.COLUMN_BEERS)));
 		tab.setSodaCount(c.getInt(c.getColumnIndex(dbHelper.COLUMN_SODAS)));

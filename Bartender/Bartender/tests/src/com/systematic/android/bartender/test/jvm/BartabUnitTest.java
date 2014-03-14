@@ -2,14 +2,10 @@ package com.systematic.android.bartender.test.jvm;
 
 import java.util.Locale;
 
+import com.systematic.android.bartender.data.Bartab;
+
+
 import junit.framework.TestCase;
-
-import com.systematic.android.bartender.Bartab;
-import com.systematic.android.bartender.activities.MainActivity;
-
-import android.content.Intent;
-import android.test.ActivityInstrumentationTestCase2;
-import android.test.ActivityUnitTestCase;
 
 public class BartabUnitTest extends TestCase {
 

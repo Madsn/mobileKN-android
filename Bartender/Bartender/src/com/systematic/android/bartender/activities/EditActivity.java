@@ -2,11 +2,13 @@ package com.systematic.android.bartender.activities;
 
 import java.util.Date;
 
-import com.systematic.android.bartender.Bartab;
-import com.systematic.android.bartender.BartabDataSource;
+
 import com.systematic.android.bartender.R;
 import com.systematic.android.bartender.R.layout;
 import com.systematic.android.bartender.R.menu;
+import com.systematic.android.bartender.data.Bartab;
+import com.systematic.android.bartender.data.BartabDataSource;
+
 
 import android.app.Activity;
 import android.content.Intent;
@@ -93,8 +95,6 @@ public class EditActivity extends Activity {
 	}
 
 	public void onSaveBtnClick(View v) {
-		Date curDate = new Date();
-		tab.setLastEditedAt(curDate);
 		tab.setInitials(initials.getText().toString());
 		
 		dbsource.open();
