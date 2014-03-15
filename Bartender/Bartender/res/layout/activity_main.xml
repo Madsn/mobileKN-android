@@ -138,13 +138,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1" >
-
-        <Button
-            android:id="@+id/save_btn"
-            android:layout_width="match_parent"
-            android:layout_weight="1"
-            android:text="@string/save_btn_text" 
-            android:onClick="onSaveBtnClick"/>
         
         <Button
             android:id="@+id/history_btn"
@@ -152,6 +145,14 @@
             android:layout_weight="1"
             android:text="@string/history_btn_text" 
             android:onClick="onHistoryBtnClick"/>
+
+        <Button
+            android:id="@+id/save_btn"
+            android:layout_width="match_parent"
+            android:layout_weight="1"
+            android:text="@string/save_btn_text" 
+            android:onClick="onSaveBtnClick"/>
+
     </TableRow>
 
 </LinearLayout>

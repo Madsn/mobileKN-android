@@ -15,4 +15,5 @@
     <string name="history_btn_text">Se historik</string>
     <string name="action_delete_all">Slet ALT</string>
     <string name="no_history">Historik databasen er tom</string>
+    <string name="back_button_toast">Tryk på tilbage knappen igen for at lukke app\'en</string>
 </resources>

@@ -7,19 +7,21 @@ import android.view.Menu;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.systematic.android.bartender.R;
 import com.systematic.android.bartender.data.Bartab;
 import com.systematic.android.bartender.data.BartabDataSource;
-
 
 public class MainActivity extends Activity {
 
 	TextView sodaCount, beerCount;
 	EditText initials;
 	Bartab bartab;
-	
+
 	private BartabDataSource dbsource;
+	private long lastBackPressTime;
+	private Toast toast;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -29,8 +31,8 @@ public class MainActivity extends Activity {
 		sodaCount = (TextView) findViewById(R.id.soda_count);
 		beerCount = (TextView) findViewById(R.id.beer_count);
 		initials = (EditText) findViewById(R.id.initials_edittext);
-		
-		if (savedInstanceState == null){
+
+		if (savedInstanceState == null) {
 			bartab = new Bartab(getResources().getConfiguration().locale);
 		} else {
 			bartab = (Bartab) savedInstanceState.getSerializable(Bartab.TAG);
@@ -74,16 +76,16 @@ public class MainActivity extends Activity {
 
 	public void onSaveBtnClick(View v) {
 		bartab.setInitials(initials.getText().toString());
-		
+
 		dbsource.open();
 		dbsource.saveBartab(bartab);
 		dbsource.close();
-		
+
 		bartab.resetAll();
 		Intent intent = new Intent(this, HistoryActivity.class);
 		startActivity(intent);
 	}
-	
+
 	public void onHistoryBtnClick(View v) {
 		Intent intent = new Intent(this, HistoryActivity.class);
 		startActivity(intent);
@@ -93,9 +95,9 @@ public class MainActivity extends Activity {
 	protected void onSaveInstanceState(final Bundle outState) {
 		super.onSaveInstanceState(outState);
 		outState.putSerializable(Bartab.TAG, bartab);
-		
+
 	}
-	
+
 	@Override
 	protected void onResume() {
 		super.onResume();
@@ -106,4 +108,16 @@ public class MainActivity extends Activity {
 		bartab.resetAll();
 	}
 
+	@Override
+	public void onBackPressed() {
+		if (this.lastBackPressTime < System.currentTimeMillis() - 4000) {
+			toast = Toast.makeText(this, R.string.back_button_toast, 4000);
+			toast.show();
+			this.lastBackPressTime = System.currentTimeMillis();
+		} else {
+			if (toast != null)
+				toast.cancel();
+			super.onBackPressed();
+		}
+	}
 }
