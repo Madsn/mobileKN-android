@@ -1,7 +1,6 @@
 package com.systematic.android.bartender.test.emulator;
 
 import android.test.ActivityInstrumentationTestCase2;
-import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -152,12 +151,10 @@ public class MainActivityTest extends
 	}
 
 	private int getSodaCount() {
-		// updateGUI();
 		return Integer.parseInt(sodaCount.getText().toString());
 	}
 
 	private int getBeerCount() {
-		// updateGUI();
 		return Integer.parseInt(beerCount.getText().toString());
 	}
 

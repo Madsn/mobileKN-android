@@ -1,13 +1,9 @@
 package com.systematic.android.bartender.data;
 
 import java.io.Serializable;
-import java.text.SimpleDateFormat;
+import java.text.DateFormat;
 import java.util.Date;
 import java.util.Locale;
-
-import java.text.DateFormat;
-
-import com.systematic.android.bartender.GlobalSettings;
 
 
 public class Bartab implements Serializable {

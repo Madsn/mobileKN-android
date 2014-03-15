@@ -2,15 +2,6 @@ package com.systematic.android.bartender.activities;
 
 import java.util.List;
 
-
-import com.systematic.android.bartender.R;
-import com.systematic.android.bartender.R.layout;
-import com.systematic.android.bartender.R.menu;
-import com.systematic.android.bartender.data.Bartab;
-import com.systematic.android.bartender.data.BartabDataSource;
-
-
-import android.app.Activity;
 import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -18,8 +9,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.BaseAdapter;
 import android.widget.ListView;
+
+import com.systematic.android.bartender.R;
+import com.systematic.android.bartender.data.Bartab;
+import com.systematic.android.bartender.data.BartabDataSource;
 
 public class HistoryActivity extends ListActivity {
 	

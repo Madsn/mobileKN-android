@@ -1,24 +1,16 @@
 package com.systematic.android.bartender.activities;
 
-import java.util.Date;
-
-
-import com.systematic.android.bartender.R;
-import com.systematic.android.bartender.R.layout;
-import com.systematic.android.bartender.R.menu;
-import com.systematic.android.bartender.data.Bartab;
-import com.systematic.android.bartender.data.BartabDataSource;
-
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import com.systematic.android.bartender.R;
+import com.systematic.android.bartender.data.Bartab;
+import com.systematic.android.bartender.data.BartabDataSource;
 
 public class EditActivity extends Activity {
 	

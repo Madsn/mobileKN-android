@@ -1,14 +1,13 @@
 package com.systematic.android.bartender.test.emulator;
 
-import android.app.Activity;
 import android.app.Instrumentation;
 import android.app.Instrumentation.ActivityMonitor;
 import android.test.ActivityInstrumentationTestCase2;
 import android.test.UiThreadTest;
-import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
+import com.systematic.android.bartender.R;
 import com.systematic.android.bartender.activities.EditActivity;
 import com.systematic.android.bartender.activities.HistoryActivity;
 import com.systematic.android.bartender.data.Bartab;
@@ -16,10 +15,11 @@ import com.systematic.android.bartender.data.BartabDataSource;
 
 public class HistoryActivityTest extends
 		ActivityInstrumentationTestCase2<HistoryActivity> {
+	
+	private static final String INITIALS = "MIKMA_TEST";
 
 	private HistoryActivity activity;
 	private ListAdapter adapter;
-	private ListView list;
 	private BartabDataSource db;
 
 	public HistoryActivityTest() {
@@ -43,12 +43,18 @@ public class HistoryActivityTest extends
 		db.close();
 		super.tearDown();
 	}
+	
+	@UiThreadTest
+	public void testItemsShownInList() {
+		assertEquals(0, activity.getListView().getCount());
+		saveBartabInDb(5, 5, INITIALS);
+		saveBartabInDb(6, 4, INITIALS);
+		assertEquals(2, activity.getListView().getCount());
+	}
 
 	@UiThreadTest
 	public void testClickingItemOpensEditActivity() {
-		saveBartabInDb(5, 10, "MIKMA_TEST");
-
-		assertEquals(1, adapter.getCount());
+		saveBartabInDb(5, 10, INITIALS);
 
 		Instrumentation inst = getInstrumentation();
 		ActivityMonitor monitor = inst.addMonitor(EditActivity.class.getName(),
@@ -56,7 +62,7 @@ public class HistoryActivityTest extends
 		assertEquals(0, monitor.getHits());
 
 		int itemNumber = 0;
-		list = activity.getListView();
+		ListView list = activity.getListView();
 		list.performItemClick(list.getChildAt(itemNumber), itemNumber,
 				adapter.getItemId(itemNumber));
 

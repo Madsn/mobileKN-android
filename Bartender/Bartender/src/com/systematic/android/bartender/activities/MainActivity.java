@@ -1,7 +1,5 @@
 package com.systematic.android.bartender.activities;
 
-import java.util.Date;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,11 +8,9 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.systematic.android.bartender.GlobalSettings;
 import com.systematic.android.bartender.R;
 import com.systematic.android.bartender.data.Bartab;
 import com.systematic.android.bartender.data.BartabDataSource;
-import com.systematic.android.bartender.data.DbHelper;
 
 
 public class MainActivity extends Activity {
