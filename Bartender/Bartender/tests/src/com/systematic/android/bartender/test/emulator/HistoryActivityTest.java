@@ -3,20 +3,17 @@ package com.systematic.android.bartender.test.emulator;
 import android.app.Instrumentation;
 import android.app.Instrumentation.ActivityMonitor;
 import android.test.ActivityInstrumentationTestCase2;
+import android.test.RenamingDelegatingContext;
 import android.test.UiThreadTest;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
-import com.systematic.android.bartender.R;
 import com.systematic.android.bartender.activities.EditActivity;
 import com.systematic.android.bartender.activities.HistoryActivity;
-import com.systematic.android.bartender.data.Bartab;
 import com.systematic.android.bartender.data.BartabDataSource;
 
 public class HistoryActivityTest extends
 		ActivityInstrumentationTestCase2<HistoryActivity> {
-	
-	private static final String INITIALS = "MIKMA_TEST";
 
 	private HistoryActivity activity;
 	private ListAdapter adapter;
@@ -33,7 +30,8 @@ public class HistoryActivityTest extends
 		adapter = activity.getListAdapter();
 		getInstrumentation().invokeMenuActionSync(activity,
 				com.systematic.android.bartender.R.id.action_delete_all, 0);
-		db = new BartabDataSource(activity);
+		RenamingDelegatingContext context = new RenamingDelegatingContext(activity, "test_");
+		db = new BartabDataSource(context);
 		db.open();
 		db.deleteAllBartabs();
 	}
@@ -47,14 +45,14 @@ public class HistoryActivityTest extends
 	@UiThreadTest
 	public void testItemsShownInList() {
 		assertEquals(0, activity.getListView().getCount());
-		saveBartabInDb(5, 5, INITIALS);
-		saveBartabInDb(6, 4, INITIALS);
+		saveBartabInDb(5, 5, Util.INITIALS);
+		saveBartabInDb(6, 4, Util.INITIALS);
 		assertEquals(2, activity.getListView().getCount());
 	}
 
 	@UiThreadTest
 	public void testClickingItemOpensEditActivity() {
-		saveBartabInDb(5, 10, INITIALS);
+		saveBartabInDb(5, 10, Util.INITIALS);
 
 		Instrumentation inst = getInstrumentation();
 		ActivityMonitor monitor = inst.addMonitor(EditActivity.class.getName(),
@@ -73,11 +71,7 @@ public class HistoryActivityTest extends
 	}
 
 	private void saveBartabInDb(int sodaCount, int beerCount, String initials) {
-		Bartab tab = new Bartab();
-		tab.setBeerCount(beerCount);
-		tab.setSodaCount(sodaCount);
-		tab.setInitials(initials);
-		db.saveBartab(tab);
+		Util.saveBartabInDb(sodaCount, beerCount, initials, db);
 		activity.initializeAdapter();
 	}
 

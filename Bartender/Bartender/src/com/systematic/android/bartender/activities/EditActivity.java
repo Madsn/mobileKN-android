@@ -35,8 +35,7 @@ public class EditActivity extends Activity {
 		Long tabId = intent.getLongExtra(HistoryActivity.EDIT_MESSAGE, -1);
 		
 		dbsource = new BartabDataSource(this);
-//		tab = getBartabFromDB(tabId);
-//		Log.v("TEST", tab.toString());
+
 		if (savedInstanceState == null){
 			tab = getBartabFromDB(tabId);
 		} else {

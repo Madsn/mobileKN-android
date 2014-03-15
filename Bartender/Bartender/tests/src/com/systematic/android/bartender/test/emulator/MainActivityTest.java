@@ -1,12 +1,14 @@
 package com.systematic.android.bartender.test.emulator;
 
 import android.test.ActivityInstrumentationTestCase2;
+import android.test.RenamingDelegatingContext;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import com.systematic.android.bartender.R;
 import com.systematic.android.bartender.activities.MainActivity;
+import com.systematic.android.bartender.data.BartabDataSource;
 
 public class MainActivityTest extends
 		ActivityInstrumentationTestCase2<MainActivity> {
@@ -74,7 +76,6 @@ public class MainActivityTest extends
 		multipleClicks(addBeerBtn, 5);
 		assertEquals("Beercount before destroying activity", 5, getBeerCount());
 
-		// destroyActivity();
 		activity.finish();
 		setActivity(null);
 		activity = getActivity();
@@ -107,14 +108,14 @@ public class MainActivityTest extends
 		resumeActivity();
 		assertEquals("Beercount after resuming activity", 4, getBeerCount());
 	}
-
-	private void destroyActivity() {
+	
+	private void setInitials(String initials) {
 		activity.runOnUiThread(new Runnable() {
 			public void run() {
-				getInstrumentation().callActivityOnDestroy(activity);
+				initialsText.setText(Util.INITIALS);
 			}
 		});
-		// getInstrumentation().waitForIdleSync();
+		getInstrumentation().waitForIdleSync();
 	}
 
 	private void resumeActivity() {
@@ -139,14 +140,6 @@ public class MainActivityTest extends
 
 	private void clickOn(final Button button) {
 		multipleClicks(button, 1);
-	}
-
-	private void updateGUI() {
-		activity.runOnUiThread(new Runnable() {
-			public void run() {
-				activity.updateGUI();
-			}
-		});
 		getInstrumentation().waitForIdleSync();
 	}
 
